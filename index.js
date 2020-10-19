@@ -25,15 +25,31 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
         return clean;
     }
 
+    function truncate(str, n){
+        return (str.length > n) ? str.substr(0, n-1) + '&hellip;' : str;
+    };
+
     function chunk(str, n) {
+        var temp = str.split(' ');
         var ret = [];
-        var i;
-        var len;
-        for(i = 0, len = str.length; i < len; i += n) {
-           ret.push(str.substr(i, n));
-        }
+        var sum = 0;
+        var hold = '';
     
-        return ret
+        for(var i = 0;  i < temp.length; i++) {
+          sum += temp[i].length+1;
+          if(sum < n) {
+            hold += (temp[i] + ' ');
+          } else {
+            hold += '\n';
+            ret.push(hold);
+            hold = '';
+            hold += temp[i] + ' ';
+            sum = temp[i].length+1;
+          }
+        }
+        ret.push(hold);
+        console.log(ret);
+        return ret;
     };
     
 
@@ -43,16 +59,16 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
         if(event.type == "message_reply" && !timeout.inTimeout(event.threadID)) {
             switch(event.body) {
                 case "!soyjack":
-                    var filter = chunk(removeEmojis(event.messageReply.body.toUpperCase()),13);
-                    var padding = (Math.round(filter.length/2)*100)+40;
-                    var filter = filter.join('\n');
+                    var filter = chunk(truncate(removeEmojis(event.messageReply.body.toUpperCase()),400),30);
+                    var padding = (Math.round(filter.length/2)*50)+40;
+                    var filter = filter.join(' ');
 
                     let options = {
                         image: 'soyjack.jpg',         // Required
                         outfile: 'soyjack-meme.jpg',  // Required
                         topText: filter,            // Required
                         font: './impact.ttf',
-                        fontSize: 100,
+                        fontSize: 50,
                         textPos: 'Center',
                         padding: padding,
                     }    
