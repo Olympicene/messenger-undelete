@@ -7,7 +7,6 @@ const memeMaker = require('meme-maker')
 
 //dont forget you need  graphicsmagick
 
-
 login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))}, (err, api) => {
     if(err) return console.error(err);
 
@@ -17,7 +16,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
     })
 
     function removeEmojis(string) {
-        var regex = /[^a-z0-9 ]/gi;
+        var regex = /[^a-z0-9 _.,!"'/$]/gi;
         var clean = string.replace(regex, '')
         if(clean == '') {
             clean = 'only alphanumeric characters because fuck you';
