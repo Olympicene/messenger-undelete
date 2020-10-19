@@ -1,19 +1,17 @@
 const fs = require("fs");
-var path = require('path');
+const path = require('path');
 const login = require("facebook-chat-api");
 const request = require('request');
+const timeout = require('./src/timeout.js');
+
 
 login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))}, (err, api) => {
     if(err) return console.error(err);
 
-    api.setOptions(
-        {
+    api.setOptions({
         listenEvents: true,
         selfListen: true
     })
-
-    var timeout = 30000; // 1000 for one second
-    var inTimeout = {};
 
     function removeEmojis(string) {
         var regex = /[^a-z0-9_]/gi;
@@ -33,11 +31,12 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
         });
     };
 
+    //start of important shit
     api.listenMqtt((err, event) => {
         if(err) return console.error(err);
 
-        var id = event.threadID;
-        if(event.type == "message_reply" && !inTimeout[id] && event.threadID == 2401681243197992) {
+        if(event.type == "message_reply" && !timeout.inTimeout(event.threadID)) {
+            console.log("i got here");
             switch(event.body) {
                 case "!soyjack":
                     var filter = removeEmojis(event.messageReply.body.split(' ').join('_'));
@@ -49,17 +48,10 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
                             attachment: fs.createReadStream('soyjack.png')
                         }
                         api.sendMessage(msg, event.threadID);
-                        if(timeout){
-                            inTimeout[id] = true;
-                            setTimeout(function(){
-                                inTimeout[id] = false;
-                            }, timeout);
-                        }
+                        timeout.threadTimeout(event.threadID);
                       });
                 default:
             }
-        } else if(inTimeout[id]){
-            console.log("multiple attempts")
         }
     });
 });
