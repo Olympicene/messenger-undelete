@@ -3,6 +3,9 @@ const path = require('path');
 const login = require("facebook-chat-api");
 const request = require('request');
 const timeout = require('./src/timeout.js');
+const memeMaker = require('meme-maker')
+
+//dont forget you need  graphicsmagick
 
 
 login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))}, (err, api) => {
@@ -14,7 +17,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
     })
 
     function removeEmojis(string) {
-        var regex = /[^a-z0-9_]/gi;
+        var regex = /[^a-z0-9 ]/gi;
         var clean = string.replace(regex, '')
         if(clean == '') {
             clean = 'only alphanumeric characters because fuck you';
@@ -22,34 +25,47 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
         return clean;
     }
 
-    var download = function(uri, filename, callback){
-        request.head(uri, function(err, res, body){
-            console.log('content-type:', res.headers['content-type']);
-            console.log('content-length:', res.headers['content-length']);
-
-            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
-        });
+    function chunk(str, n) {
+        var ret = [];
+        var i;
+        var len;
+        for(i = 0, len = str.length; i < len; i += n) {
+           ret.push(str.substr(i, n));
+        }
+    
+        return ret
     };
+    
 
-    //start of important shit
+    //start of important stuff
     api.listenMqtt((err, event) => {
         if(err) return console.error(err);
-
         if(event.type == "message_reply" && !timeout.inTimeout(event.threadID)) {
-            console.log("i got here");
             switch(event.body) {
                 case "!soyjack":
-                    var filter = removeEmojis(event.messageReply.body.split(' ').join('_'));
-                    console.log(filter);
-                    download("https://memegen.link/custom/" + filter + ".jpg?alt=https://i.kym-cdn.com/photos/images/facebook/001/330/809/d90.png", 'soyjack.png', function(){
-                        console.log('done');
+                    var filter = chunk(removeEmojis(event.messageReply.body.toUpperCase()),13);
+                    var padding = (Math.round(filter.length/2)*100)+40;
+                    var filter = filter.join('\n');
+
+                    let options = {
+                        image: 'soyjack.jpg',         // Required
+                        outfile: 'soyjack-meme.jpg',  // Required
+                        topText: filter,            // Required
+                        font: './impact.ttf',
+                        fontSize: 100,
+                        textPos: 'Center',
+                        padding: padding,
+                    }    
+                    memeMaker(options, function(err) {
+                        if(err) return console.error(err);
+                        console.log('Image saved: ' + options.outfile);
+
                         var msg = {
-                            //url: "https://memegen.link/custom/" + event.messageReply.body.replace('/[^\w\s]/gi', '').split(' ').join('_') + ".jpg?alt=https://i.kym-cdn.com/photos/images/facebook/001/330/809/d90.png"
-                            attachment: fs.createReadStream('soyjack.png')
+                            attachment: fs.createReadStream('soyjack-meme.jpg')
                         }
                         api.sendMessage(msg, event.threadID);
                         timeout.threadTimeout(event.threadID);
-                      });
+                    });
                 default:
             }
         }
