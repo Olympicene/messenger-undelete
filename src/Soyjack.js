@@ -1,3 +1,4 @@
+const fs = require("fs");
 const Command = require('./Command.js');
 const memeMaker = require('meme-maker');
 
@@ -71,7 +72,9 @@ module.exports = class Soyjack extends Command {
             console.log('Image saved: ' + options.outfile);
         });
 
-        return outfile;
+        this.message = {
+            attachment: fs.createReadStream(outfile),
+        }
     }
 }
 
