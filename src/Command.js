@@ -13,7 +13,7 @@ module.exports = class Commands {
         }
     }
 
-    cleanInput(text, max) {
+    cleanInput(text, max, chunk) {
         const regex = /[^a-z0-9 _.,!"'/$]/gi;
 
         text = text.toUpperCase();
@@ -21,7 +21,7 @@ module.exports = class Commands {
         if(text == '')
             text = 'PLEASE ONLY USE ALPHANUMERIC CHARACTERS';
         text = this.truncate(text, max);
-        text = this.chunk(text, 30);
+        text = this.chunk(text, chunk);
         return text;
     }
 

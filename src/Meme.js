@@ -28,22 +28,34 @@ module.exports = class Meme extends Command {
         this.download(url, 'meme.jpg', () => {
             var self = this;
             let img = gm('meme.jpg');
+
             img.size(function(err, dimensions) {
-                var scale = Math.round(Math.min(dimensions.height, dimensions.height)/8);
-                
-                text = self.cleanInput(text.substring(5), 200, 20);
-                var padding = Math.round(Math.round(text.length/2)*scale)+Math.round(scale*0.8);
-                console.log(padding);
-                text = text.join(' ');
+                var scale = Math.round(Math.min(dimensions.width, dimensions.height)/9);
+
+                var topText = text.split(/_(.+)/)[0];
+                var botText = text.split(/_(.+)/)[1];
+
+                topText = self.cleanInput(topText.substring(5), 200, Math.round((dimensions.width/(scale/2))*1.1));
+
+                var padding = Math.round(Math.round(topText.length/2)*scale)+Math.round(scale*0.5);
+                topText = topText.join(' ');
+
+                botText = self.cleanInput(botText, 200, Math.round((dimensions.width/(scale/2))*1.1));
+                botText = botText.join(' ');
+
+                console.log(topText);
+                console.log(botText);
     
                 let options = {
                     image: 'meme.jpg',         // Required
                     outfile: 'meme-meme.jpg',  // Required
-                    topText: text,            // Required
+                    topText: topText,
+                    bottomText: botText,           // Required
                     font: './impact.ttf',
                     fontSize: scale,
                     textPos: 'Center',
                     padding: padding,
+                    strokeWeight: Math.round(Math.round(scale/15)),
                 }
     
                 memeMaker(options, function(err) {
