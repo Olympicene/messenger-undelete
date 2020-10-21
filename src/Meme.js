@@ -30,14 +30,22 @@ module.exports = class Meme extends Command {
             let img = gm('meme.jpg');
 
             img.size(function(err, dimensions) {
-                var scale = Math.round(Math.min(dimensions.width, dimensions.height)/9);
+                var scale = Math.round(Math.min(dimensions.width, dimensions.height)/9);                
 
                 var topText = text.split(/_(.+)/)[0];
                 var botText = text.split(/_(.+)/)[1];
 
+                if(botText == undefined)
+                    var botText = '';
+
+                if(topText == undefined)
+                    var topText = '';
+
+                console.log(botText);
+
                 topText = self.cleanInput(topText.substring(5), 200, Math.round((dimensions.width/(scale/2))*1.1));
 
-                var padding = Math.round(Math.round(topText.length/2)*scale)+Math.round(scale*0.5);
+                var padding = Math.round(Math.round(topText.length/2)*scale)+Math.round(scale*1.6);
                 topText = topText.join(' ');
 
                 botText = self.cleanInput(botText, 200, Math.round((dimensions.width/(scale/2))*1.1));
