@@ -13,7 +13,7 @@ module.exports = class Soyjack extends Command {
         }
     }
         
-    getSoyJack(text) {
+    getSoyJack(text, callback_) {
         const outfile = 'soyjack-meme.jpg'
         text = this.cleanInput(text, 400, 30);
         var padding = (Math.round(text.length/2)*50)+40;
@@ -31,11 +31,13 @@ module.exports = class Soyjack extends Command {
         memeMaker(options, function(err) {
             if(err) return console.error(err);
             console.log('Image saved: ' + options.outfile);
-        });
 
-        this.message = {
-            attachment: fs.createReadStream(outfile),
-        }
+            var msg = {
+                attachment: fs.createReadStream(options.outfile),
+            }
+
+            callback_(msg);
+        });
     }
 }
 

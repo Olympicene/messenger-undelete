@@ -1,16 +1,18 @@
-const time = 30000;
-var timeout = {};
+module.exports = class Timeout {
 
-function inTimeout(threadID) {
-    return timeout[threadID];
+    constructor(time) {
+        this.time = time;
+        this.timeout = {};
+    }
+
+    inTimeout(threadID) {
+        return this.timeout[threadID];
+    }
+
+    threadTimeout(threadID) {
+        this.timeout[threadID] = true;
+        setTimeout(() => {this.timeout[threadID] = false;}, this.time);
+    }
 }
 
-function threadTimeout(threadID) {
-    timeout[threadID] = true;
-    setTimeout(() => {timeout[threadID] = false;}, time);
-}
 
-module.exports = {
-    inTimeout,
-    threadTimeout,
- }

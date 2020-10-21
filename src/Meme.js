@@ -43,9 +43,6 @@ module.exports = class Meme extends Command {
                 botText = self.cleanInput(botText, 200, Math.round((dimensions.width/(scale/2))*1.1));
                 botText = botText.join(' ');
 
-                console.log(topText);
-                console.log(botText);
-    
                 let options = {
                     image: 'meme.jpg',         // Required
                     outfile: 'meme-meme.jpg',  // Required
@@ -61,9 +58,7 @@ module.exports = class Meme extends Command {
                 memeMaker(options, function(err) {
                     if(err) return console.error(err);
                     console.log('Image saved: ' + options.outfile);
-                    
-                    console.log(options.outfile);
-    
+
                     var msg = {
                         attachment: fs.createReadStream(options.outfile),
                     }
