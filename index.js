@@ -4,6 +4,8 @@ const login = require("facebook-chat-api");
 const Timeout = require('./src/Timeout.js');
 const Soyjack = require('./src/Soyjack.js');
 const Meme = require('./src/Meme.js');
+const runes = require('runes');
+
 
 //dont forget you need  graphicsmagick
 
@@ -16,11 +18,11 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
     })
 
     const soy = new Soyjack([
-        '4341136652627262',
+        '2401681243197992',
     ]);
 
     const mem = new Meme([
-        '4341136652627262',
+        '2401681243197992',
     ]);
 
     const use = new Timeout(30000);
@@ -31,7 +33,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
     //     console.log(list);
     // });
 
-    var isAdmin = ['100055669966245'];
+    var isAdmin = [''];
     
         // api.getThreadList(5, null, [], (err, list) => {
         //     console.log(list[0].participants);
@@ -43,29 +45,45 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
 
     //start of important stuff
     api.listenMqtt((err, event) => {
+
         if(err) return console.error(err);
 
         if(!use.inTimeout(event.threadID) && !admin.inTimeout(event.threadID)) {
-            if(event.type == "message_reply" && soy.threadIDs.includes(event.threadID) && event.body == soy.term && event.messageReply.attachments[0] === undefined) {
-                soy.getSoyJack(event.messageReply.body, (msg) => {
-                    api.sendMessage(msg, event.threadID);
-                    use.threadTimeout(event.threadID);
-                });
-            }
-            if(event.type == "message_reply" && !(event.messageReply.attachments[0] === undefined)) {
-                if(event.messageReply.attachments[0].type == 'photo' && event.body.substring(0,5) == '!meme') {
-                    mem.getMeme(event.body, event.messageReply.attachments[0].url, (msg) => {
-                        api.sendMessage(msg, event.threadID);
+            if(event.type == "message") {
+
+                var patt = new RegExp("(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])");
+
+                for (let item of runes(event.body)) {
+                    if(event.body.substring(0,6) == '!emoji' && patt.test(item)) {
+                        api.changeThreadEmoji(item, event.threadID, (err) => {
+                            if(err) return console.error(err);
+                        });
                         use.threadTimeout(event.threadID);
-                    });
+                        break;
+                    }
                 }
             }
-            if(event.type == "message" && isAdmin.includes(event.senderID)) {
-                if(event.body == "!pause") {
-                    admin.threadTimeout(event.threadID);
-                    console.log("admin said stop");
-                }
-            }
+
+            // if(event.type == "message_reply" && soy.threadIDs.includes(event.threadID) && event.body == soy.term && event.messageReply.attachments[0] === undefined) {
+            //     soy.getSoyJack(event.messageReply.body, (msg) => {
+            //         api.sendMessage(msg, event.threadID);
+            //         use.threadTimeout(event.threadID);
+            //     });
+            // }
+            // if(event.type == "message_reply" && !(event.messageReply.attachments[0] === undefined)) {
+            //     if(event.messageReply.attachments[0].type == 'photo' && event.body.substring(0,5) == '!meme') {
+            //         mem.getMeme(event.body, event.messageReply.attachments[0].url, (msg) => {
+            //             api.sendMessage(msg, event.threadID);
+            //             use.threadTimeout(event.threadID);
+            //         });
+            //     }
+            // }
+            // if(event.type == "message" && isAdmin.includes(event.senderID)) {
+            //     if(event.body == "!pause") {
+            //         admin.threadTimeout(event.threadID);
+            //         console.log("admin said stop");
+            //     }
+            // }
         }
     });
 });

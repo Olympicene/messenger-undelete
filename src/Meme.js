@@ -36,10 +36,10 @@ module.exports = class Meme extends Command {
                 var botText = text.split(/_(.+)/)[1];
 
                 if(botText == undefined)
-                    var botText = '';
+                    var botText = ' ';
 
                 if(topText == undefined)
-                    var topText = '';
+                    var topText = ' ';
 
                 console.log(botText);
 
