@@ -5,6 +5,7 @@ const Timeout = require('./src/Timeout.js');
 const Soyjack = require('./src/Soyjack.js');
 const Meme = require('./src/Meme.js');
 const runes = require('runes');
+const { Console } = require("console");
 
 
 //dont forget you need  graphicsmagick
@@ -62,8 +63,17 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
                         use.threadTimeout(event.threadID);
                         break;
                     }
+
+                    if(event.body.substring(0,5) == '!nick' && event.body.length > 6) {
+                        api.changeNickname(event.body.substring(5), event.threadID, event.senderID, (err) => {
+                            if(err) return console.error(err);
+                        });
+                        use.threadTimeout(event.threadID);
+                        break;
+                    }
                 }
             }
+
 
             // if(event.type == "message_reply" && soy.threadIDs.includes(event.threadID) && event.body == soy.term && event.messageReply.attachments[0] === undefined) {
             //     soy.getSoyJack(event.messageReply.body, (msg) => {
