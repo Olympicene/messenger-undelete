@@ -1,53 +1,38 @@
+const { Console } = require("console");
+
 module.exports = class Commands {
 
     constructor(ids) {
         this.term = '!command';
         this.type = 'message_reply';
         this.threadIDs = ids;
-        this.message = {
-            body: '',
-            sticker: '',
-            attachment: '',
-            url: '',
-            emoji: '',
-        }
     }
 
-    cleanInput(text, max, chunk) {
+    cleanInput(text) { //cleans input of emojis etc
         const regex = /[^a-z0-9 _.,!"'/$]/gi;
-
-        text = text.toUpperCase();
         text = text.replace(regex, '');
-        if(text == '')
-            text = 'PLEASE ONLY USE ALPHANUMERIC CHARACTERS';
-        text = this.truncate(text, max);
-        text = this.chunk(text, chunk);
         return text;
     }
 
-    truncate(str, n) {
-        return (str.length > n) ? str.substr(0, n-1) + '&hellip;' : str;
-    };
+    checkEvent(event) { //check if message type and term is valid
+        if(event.type == this.type) {
 
-    chunk(str, n) {
-        var temp = str.split(' ');
-        var ret = [];
-        var sum = 0;
-        var hold = '';
-    
-        for(var i = 0;  i < temp.length; i++) {
-          sum += temp[i].length+1;
-          if(sum < n) {
-            hold += (temp[i] + ' ');
-          } else {
-            hold += '\n';
-            ret.push(hold);
-            hold = '';
-            hold += temp[i] + ' ';
-            sum = temp[i].length+1;
-          }
+            if(event.body.substring(0, this.term.length) == this.term) {
+                return true; 
+            }
         }
-        ret.push(hold);
-        return ret;
+        return false;
     }
+
+    getContent(event) { //gets added content of command
+        if(event.type == this.type) {
+            return(this.cleanInput(event.body.substring(this.term.length, event.body.length)).split(" "));
+        }
+    }
+
+    isContentEmpty(event){ //checks if there is no added content
+        return this.getContent(event).length == 1 && this.getContent(event)[0] == ''; 
+    }
+
+
 }
