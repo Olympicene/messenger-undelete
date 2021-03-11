@@ -1,7 +1,5 @@
-const fs = require("fs");
 const Command = require('./Command.js');
-const login = require("facebook-chat-api");
-const runes = require('runes');
+
 
 module.exports = class Theme_list extends Command {
 
@@ -15,11 +13,11 @@ module.exports = class Theme_list extends Command {
     }
 
     getTheme(event, api, use) {
-        if(super.checkEvent(event)) {
+        if(super.checkEvent(event)) { //check if command is there
 
-            if(super.isContentEmpty(event)) {
+            if(super.isContentEmpty(event)) { //check if no other added commands
                 for (var key in api.threadColors) {
-                    this.message.body += key + "\n";
+                    this.message.body += key + "\n"; //turns dictionary into string
                 }
                 
                 api.sendMessage(this.message, event.threadID, (err) => { //change send thread stuff

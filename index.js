@@ -8,7 +8,8 @@ const Theme = require('./src/Theme_list.js');
 
 // TODO
 // Change Emoji Capability //
-// Change Theme Capability 
+// Add Theme list
+// Change Theme Capability //
 // List Possible Themes
 // Create Poll
 // Screenshot generator (HTML to screenshot)
@@ -29,7 +30,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
     //start timeout timer
     const use = new Timeout(30000);
 
-    //initialize commands
+    //initialize commands add the threadID of chats you want enabled
     var emj = new Emoji("4341136652627262");
     var the = new Theme("4341136652627262");
 
