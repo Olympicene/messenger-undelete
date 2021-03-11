@@ -1,7 +1,7 @@
 const Command = require('./Command.js');
 const runes = require('runes');
 
-module.exports = class Emoji extends Command {
+module.exports = class ChangeEmoji extends Command {
 
     constructor(ids) {
         super(ids);
@@ -10,7 +10,7 @@ module.exports = class Emoji extends Command {
         this.patt = new RegExp("(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])"); //regex to find all emojis
     }
 
-    getEmoji(event, api, use) {
+    changeEmoji(event, api, use) {
         if(super.checkEvent(event)) { //check if message type and term is valid
 
             for (const item of runes(event.body)) { //goes through message

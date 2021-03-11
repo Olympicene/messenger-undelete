@@ -1,7 +1,7 @@
 const Command = require('./Command.js');
 
 
-module.exports = class Theme_list extends Command {
+module.exports = class ThemeList extends Command {
 
     constructor(ids) {
         super(ids);
@@ -12,7 +12,8 @@ module.exports = class Theme_list extends Command {
         }
     }
 
-    getTheme(event, api, use) {
+    getThemeList(event, api, use) {
+
         if(super.checkEvent(event)) { //check if command is there
 
             if(super.isContentEmpty(event)) { //check if no other added commands

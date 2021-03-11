@@ -1,10 +1,9 @@
 const fs = require("fs");
-const path = require('path');
 const login = require("facebook-chat-api");
-const runes = require('runes');
 const Timeout = require('./src/Timeout.js');
-const Emoji = require('./src/Emoji.js');
-const Theme = require('./src/Theme_list.js');
+const ChangeEmoji = require('./src/ChangeEmoji.js');
+const ThemeList = require('./src/ThemeList.js');
+const ChangeTheme = require('./src/ChangeTheme.js');
 
 // TODO
 // Change Emoji Capability //
@@ -31,8 +30,9 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
     const use = new Timeout(30000);
 
     //initialize commands add the threadID of chats you want enabled
-    var emj = new Emoji("4341136652627262");
-    var the = new Theme("4341136652627262");
+    var emj = new ChangeEmoji("4341136652627262");
+    var cth = new ThemeList("4341136652627262");
+    var the = new ChangeTheme("4341136652627262");
 
 
     //listen loop
@@ -44,9 +44,9 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
 
         if(!use.inTimeout(event.threadID)) {
 
-            emj.getEmoji(event, api, use);
-            the.getTheme(event, api, use);
-        
+            emj.changeEmoji(event, api, use);
+            cth.getThemeList(event, api, use);
+            the.changeTheme(event, api, use)
         }
     });
 });
