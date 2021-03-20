@@ -7,28 +7,20 @@ module.exports = class ChangeTheme extends Command {
         super(ids);
         this.term = '!change_theme';
         this.type = 'message';
+        this.needContent = true;
+        this.message = {
+            body: '',
+        }
     }
 
-    changeTheme(event, api, use) {
-
-        if(super.checkEvent(event)) { //check if command is there
-
-            if(!super.isContentEmpty(event)) { //check if added content is there
-
-                for(var i = 0; i < super.getContent(event).length; i++){ //iterate through extra
-
-                    var key = super.getContent(event)[i]; 
-
-                    if(key in api.threadColors) { //check if key is valid
+    doAction(event, api) {
+        
+        var key = super.getContent(event)[0];
+        if(key in api.threadColors) { //check if key is valid
                         
-                        api.changeThreadColor(api.threadColors[key], event.threadID, (err) => { //change thread emoji
-                            if(err) return console.error(err);
-                        });
-
-                        break;
-                    }
-                }
-            }
+            api.changeThreadColor(api.threadColors[key], event.threadID, (err) => { //change thread emoji
+                if(err) return console.error(err);
+            });
         }
     }
 }

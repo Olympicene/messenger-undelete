@@ -1,31 +1,29 @@
 const Command = require('./Command.js');
 
-
 module.exports = class ThemeList extends Command {
 
     constructor(ids) {
         super(ids);
         this.term = '!theme_list';
         this.type = 'message';
+        this.needContent = false;
         this.message = {
-            body: "",
+            body: '',
         }
     }
 
-    getThemeList(event, api, use) {
+    doAction(event, api) {
 
-        if(super.checkEvent(event)) { //check if command is there
+        this.message.body = '';
 
-            if(super.isContentEmpty(event)) { //check if no other added commands
-                for (var key in api.threadColors) {
-                    this.message.body += key + "\n"; //turns dictionary into string
-                }
-                
-                api.sendMessage(this.message, event.threadID, (err) => { //change send thread stuff
-                    if(err) return console.error(err);
-                });
-            }
+        for (var key in api.threadColors) {
+            this.message.body += key + "\n"; //turns dictionary into string
         }
-    }
 
+        api.sendMessage(this.message, event.threadID, (err) => { //change send thread stuff
+            if(err) return console.error(err);
+        });
+    }
 }
+
+

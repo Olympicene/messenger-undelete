@@ -7,24 +7,15 @@ module.exports = class ChangeEmoji extends Command {
         super(ids);
         this.term = '!emoji';
         this.type = 'message';
+        this.needContent = true;
         this.patt = new RegExp("(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])"); //regex to find all emojis
     }
 
-    changeEmoji(event, api, use) {
-        if(super.checkEvent(event)) { //check if message type and term is valid
-
-            for (const item of runes(event.body)) { //goes through message
-
-                if(this.patt.test(item)) { //identifies first emoji
-
-                    api.changeThreadEmoji(item, event.threadID, (err) => { //change thread emoji
-                        if(err) return console.error(err);
-                    });
-
-                    use.threadTimeout(event.threadID); //starts timeout
-                } 
-            }
+    doAction(event, api) {
+        if(this.patt.test(super.getContent(event)[0]) && runes(super.getContent(event)[0]).length == 1) {
+            api.changeThreadEmoji(super.getContent(event)[0], event.threadID, (err) => { //change thread emoji
+                if(err) return console.error(err);
+            });
         }
-    }
-  
+    }  
 }

@@ -5,12 +5,13 @@ const ChangeEmoji = require('./src/ChangeEmoji.js');
 const ThemeList = require('./src/ThemeList.js');
 const ChangeTheme = require('./src/ChangeTheme.js');
 
+// Objective: do things that a normal messenger user can't too hard to do
 // TODO
-// Change Emoji Capability //
-// Add Theme list
-// Change Theme Capability //
-// List Possible Themes
-// Create Poll
+// Change Emoji Capability //can add emojis not normally able ot get
+// Change Theme Capability //able to get unknown themes?
+// List Possible Themes    //functionality
+// mass add remove users?
+
 // Screenshot generator (HTML to screenshot)
 // Undelete
 // emoji size?
@@ -38,15 +39,15 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
     //listen loop
     api.listenMqtt((err, event) => {
 
-        // DEBUG
+        //DEBUG
         // if(err) return console.error(err);
         // console.log(event);
 
         if(!use.inTimeout(event.threadID)) {
 
-            emj.changeEmoji(event, api, use);
-            cth.getThemeList(event, api, use);
-            the.changeTheme(event, api, use)
+            cth.listen(event, api, use);
+            emj.listen(event, api, use);
+            the.listen(event, api, use);
         }
     });
 });
