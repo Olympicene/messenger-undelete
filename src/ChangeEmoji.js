@@ -16,6 +16,8 @@ module.exports = class ChangeEmoji extends Command {
             api.changeThreadEmoji(super.getContent(event)[0], event.threadID, (err) => { //change thread emoji
                 if(err) return console.error(err);
             });
+        } else {
+            throw 'emoji content is invalid'
         }
     }  
 }
