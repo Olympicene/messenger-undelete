@@ -5,7 +5,7 @@ module.exports = class ChangeEmoji extends Command {
 
     constructor(ids) {
         super(ids);
-        this.term = '!emoji';
+        this.term = '!ChangeEmoji';
         this.type = 'message';
         this.needContent = true;
         this.patt = new RegExp("(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])"); //regex to find all emojis

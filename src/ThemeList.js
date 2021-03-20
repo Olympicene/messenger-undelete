@@ -4,7 +4,7 @@ module.exports = class ThemeList extends Command {
 
     constructor(ids) {
         super(ids);
-        this.term = '!theme_list';
+        this.term = '!ThemeList';
         this.type = 'message';
         this.needContent = false;
         this.message = {
