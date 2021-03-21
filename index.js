@@ -31,28 +31,24 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
 
 
     //start timeout timer
-    const use = new Timeout(30000);
+    const use = new Timeout(1000); //30000
 
     //initialize commands add the threadID of chats you want enabled
-    var emj = new ChangeEmoji("4341136652627262");
-    var cth = new ThemeList("4341136652627262");
-    var the = new ChangeTheme("4341136652627262");
-    var rem = new RemindMe("4341136652627262");
 
 
     //listen loop
     api.listenMqtt((err, event) => {
 
         //DEBUG
-        if(err) return console.error(err);
-        console.log(event);
+        // if(err) return console.error(err);
+        // console.log(event);
 
         if(!use.inTimeout(event.threadID)) {
 
-            cth.listen(event, api, use);
-            emj.listen(event, api, use);
-            the.listen(event, api, use);
-            rem.listen(event, api, use);
+            new ThemeList("4341136652627262").listen(event, api, use);
+            new ChangeEmoji("4341136652627262").listen(event, api, use);
+            new ChangeTheme("4341136652627262").listen(event, api, use);
+            new RemindMe("4341136652627262").listen(event, api, use);
         }
     });
 });

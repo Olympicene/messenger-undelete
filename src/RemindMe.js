@@ -1,4 +1,6 @@
 const Command = require('./Command.js');
+var parse = require('parse-duration')
+
 
 // !timer set ming
 
@@ -17,34 +19,40 @@ module.exports = class RemindMe extends Command {
 
     doAction(event, api) {
         
-        var time = super.getContent(event)[0];
+        var name = '';
 
-        if(this.isNumeric(time) && parseInt(time) > 0) { //check if time is valid
-            
-            this.message.body = 'set timer for ' + parseInt(time) + ' amount of minutes'
+        var time = super.getContent(event).join(' ');
 
-            api.sendMessage(this.message, event.threadID, (err) => { //change send thread stuff
+        if(parse(time) != null) { //check if time is valid
+
+            api.getUserInfo(event.senderID, (err, ret) => {
                 if(err) return console.error(err);
-            });
 
-            this.message.body = '@Sender';
+                for(var prop in ret) {
+                    name = ret[prop].name;
+                }
 
-            this.message.mentions = [{
-                tag: '@Sender',
-                id: event.senderID,
-            }];
+                this.message.body = 'will remind ' + name + ' in ' + parse(time) + ' milliseconds'
 
-            console.log(this.message)
-
-            setTimeout(() => {
-
-
-
-                api.sendMessage(this.message, event.threadID, (err) => { //change send thread stuff
+                api.sendMessage(this.message, event.threadID, (err) => { //confirm timer was set
                     if(err) return console.error(err);
                 });
 
-            }, parseInt(time) * 60000);
+                this.message.body = '@' + name;
+
+                this.message.mentions = [{
+                    tag: '@' + name,
+                    id: event.senderID,
+                }];
+    
+                setTimeout(() => {
+
+                    api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
+                        if(err) return console.error(err);
+                    });
+
+                }, parse(time));
+            });
 
         } else {
             throw 'invalid minute number'

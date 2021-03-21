@@ -25,6 +25,7 @@
     "mongodb": "^3.6.4",
     "node": "^14.14.0",
     "npm-check-updates": "^11.2.1",
+    "parse-duration": "^1.0.0",
     "path": "^0.12.7",
     "request": "^2.88.2",
     "runes": "^0.4.3"
