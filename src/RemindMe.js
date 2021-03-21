@@ -23,7 +23,7 @@ module.exports = class RemindMe extends Command {
 
         var time = super.getContent(event).join(' ');
 
-        if(parse(time) != null) { //check if time is valid
+        if(parse(time) != null && parse(time) > 0 && parse(time) < 2.592e8) { //check if time is valid
 
             api.getUserInfo(event.senderID, (err, ret) => {
                 if(err) return console.error(err);
