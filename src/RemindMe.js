@@ -21,7 +21,9 @@ module.exports = class RemindMe extends Command {
         
         var name = '';
 
-        var time = super.getContent(event).join(' ');
+        var time = super.getContent(event)[0];
+
+        var reminder = super.getContent(event).slice(1).join(' ');
 
         if(parse(time) != null && parse(time) > 0 && parse(time) < 2.592e8) { //check if time is valid
 
@@ -38,7 +40,7 @@ module.exports = class RemindMe extends Command {
                     if(err) return console.error(err);
                 });
 
-                this.message.body = '@' + name;
+                this.message.body = '@' + name + ' ' + reminder.join(' ');
 
                 this.message.mentions = [{
                     tag: '@' + name,
