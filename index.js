@@ -47,7 +47,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
         und.storeHistory(event, api, use);
 
 
-        if(!use.inTimeout(event.threadID)) {
+        if(!use.inTimeout(event.threadID) && event.threadID == 4341136652627262) {
 
             new ThemeList("4341136652627262").listen(event, api, use);
             new ChangeEmoji("4341136652627262").listen(event, api, use);

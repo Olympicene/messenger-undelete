@@ -17,12 +17,14 @@ module.exports = class Undelete extends Command {
         if(event.type == 'message') {
             this.history.push(event);
 
-            if(this.history.length > 20) {
-                this.history.pop();
+            if(this.history.length > 5) {
+                this.history.shift();
             }
+
+            console.log(this.history)
         } 
         
-        if(event.type == 'message_unsend' && !use.inTimeout(event.threadID)) {
+        if(event.type == 'message_unsend' && !use.inTimeout(event.threadID)  && event.threadID == 4341136652627262) {
             for(var i = 0; i < this.history.length; i++) {
 
                 if (this.history[i].messageID == event.messageID) {
