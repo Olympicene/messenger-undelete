@@ -9,6 +9,7 @@ module.exports = class Commands {
         this.needContent = false;
         this.message = {
             body: '',
+            mentions: '',
         }
         this.threadIDs = ids;
     }
@@ -31,7 +32,7 @@ module.exports = class Commands {
     };
 
     checkEvent(event) { //check if message type and term is valid
-        if(event.type == this.type) {
+        if(event.type == this.type && this.threadIDs.includes(event.threadID)) {
             if(event.body.split(' ')[0] == this.term) {
                 return true; 
             }

@@ -11,10 +11,6 @@ module.exports = class RemindMe extends Command {
         this.term = '!RemindMe';
         this.type = 'message';
         this.needContent = true;
-        this.message = {
-            body: '',
-            mentions: '',
-        }
     }
 
     doAction(event, api) {
@@ -40,7 +36,7 @@ module.exports = class RemindMe extends Command {
                     if(err) return console.error(err);
                 });
 
-                this.message.body = '@' + name + ' ' + reminder.join(' ');
+                this.message.body = '@' + name + ' ' + reminder;
 
                 this.message.mentions = [{
                     tag: '@' + name,
