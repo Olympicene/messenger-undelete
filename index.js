@@ -5,6 +5,7 @@ const ChangeEmoji = require('./src/ChangeEmoji.js');
 const ThemeList = require('./src/ThemeList.js');
 const ChangeTheme = require('./src/ChangeTheme.js');
 const RemindMe = require("./src/RemindMe.js");
+const Undelete = require("./src/Undelete.js");
 
 // Objective: do things that a normal messenger user can't too hard to do
 // TODO
@@ -35,6 +36,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
 
     //initialize commands add the threadID of chats you want enabled
 
+    und = new Undelete("4341136652627262");
 
     //listen loop
     api.listenMqtt((err, event) => {
@@ -49,6 +51,8 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
             new ChangeEmoji("4341136652627262").listen(event, api, use);
             new ChangeTheme("4341136652627262").listen(event, api, use);
             new RemindMe("4341136652627262").listen(event, api, use);
+            und.storeHistory(event, api);
+            
         }
     });
 });
