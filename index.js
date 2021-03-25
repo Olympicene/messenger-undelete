@@ -32,7 +32,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
 
 
     //start timeout timer
-    const use = new Timeout(1000); //30000
+    const use = new Timeout(30000); //30000
 
     //initialize commands add the threadID of chats you want enabled
 
@@ -44,6 +44,8 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
         //DEBUG
         // if(err) return console.error(err);
         // console.log(event);
+        und.storeHistory(event, api, use);
+
 
         if(!use.inTimeout(event.threadID)) {
 
@@ -51,8 +53,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
             new ChangeEmoji("4341136652627262").listen(event, api, use);
             new ChangeTheme("4341136652627262").listen(event, api, use);
             new RemindMe("4341136652627262").listen(event, api, use);
-            und.storeHistory(event, api);
-            
+
         }
     });
 });

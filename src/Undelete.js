@@ -13,7 +13,7 @@ module.exports = class Undelete extends Command {
         }
     }
 
-    storeHistory(event, api) {
+    storeHistory(event, api, use) {
         if(event.type == 'message') {
             this.history.push(event);
 
@@ -22,7 +22,7 @@ module.exports = class Undelete extends Command {
             }
         } 
         
-        if(event.type == 'message_unsend') {
+        if(event.type == 'message_unsend' && !use.inTimeout(event.threadID)) {
             for(var i = 0; i < this.history.length; i++) {
 
                 if (this.history[i].messageID == event.messageID) {
@@ -32,8 +32,14 @@ module.exports = class Undelete extends Command {
                     api.sendMessage(this.message, event.threadID, (err) => { //change send thread stuff
                         if(err) return console.error(err);
                     });
+
+                    use.threadTimeout(event.threadID);
                 }
+
+
             }
         }
     }
+
+    
 }
