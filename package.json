@@ -18,7 +18,7 @@
   "homepage": "https://github.com/Olympicene/messenger-meme#readme",
   "dependencies": {
     "canvas": "^2.6.1",
-    "facebook-chat-api": "github:Schmavery/facebook-chat-api",
+    "facebook-chat-api": "^1.8.0",
     "fs": "0.0.1-security",
     "gm": "^1.23.1",
     "meme-maker": "^2.1.2",

@@ -32,7 +32,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
 
 
     //start timeout timer
-    const use = new Timeout(30000); //30000
+    const use = new Timeout(1000); //30000
 
     threadIDs = ['4341136652627262']
 
@@ -54,7 +54,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
             new ChangeEmoji(threadIDs).listen(event, api, use);
             new ChangeTheme(threadIDs).listen(event, api, use);
             new RemindMe(threadIDs).listen(event, api, use);
-
+            und.listen(event, api, use);
         }
     });
 });

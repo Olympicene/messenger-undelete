@@ -6,36 +6,77 @@ module.exports = class Undelete extends Command {
         super(ids);
         this.term = '!Undelete';
         this.type = 'message';
-        this.needContent = false;
+        this.needContent = true;
         this.history = [];
+        this.personal_history = {};
     }
 
     storeHistory(event, api, use) {
+
+        //stires history of everyone
         if(event.type == 'message' || event.type == 'message_reply') {
             this.history.push(event);
 
-            if(this.history.length > 10) {
+            if(this.history.length > 30) {
                 this.history.shift();
             }
         } 
-        
-        if(event.type == 'message_unsend' && !use.inTimeout(event.threadID)  && this.threadIDs.includes(event.threadID)) {
+
+        //get personal history
+        if(event.type == 'message_unsend') {
+
+            if (!(String(event.senderID) in this.personal_history)) {
+
+                this.personal_history[String(event.senderID)] = [];
+            }
+
+            //save past in organized list
             for(var i = 0; i < this.history.length; i++) {
 
                 if (this.history[i].messageID == event.messageID) {
 
+                    this.personal_history[String(event.senderID)].unshift(this.history[i])
 
-                    this.messageToResponse(api, this.history[i])
+                    if (this.personal_history[String(event.senderID)].length > 10) {
 
-                    // this.message.body = JSON.stringify(this.history[i], null, 2);
-
-                    // api.sendMessage(this.message, event.threadID, (err) => { //change send thread stuff
-                    //     if(err) return console.error(err);
-                    // }, this.history[i].messageID);
-
-                    use.threadTimeout(event.threadID);
+                        this.personal_history[String(event.senderID)].pop();
+                    }
                 }
             }
+            //console.log(this.personal_history)
+        }
+    }
+
+    doAction(event, api) {
+
+         if (Object.keys(event.mentions).length == 1) {
+
+            if (Object.keys(event.mentions)[0] in this.personal_history) {
+
+                if (super.isNumeric(super.getContent(event)[0])) {
+
+                    if (parseInt(super.getContent(event)[0])-1 >= 0 && parseInt(super.getContent(event)[0])-1 < this.personal_history[String(Object.keys(event.mentions)[0])].length) {
+                        
+                        var msg = this.personal_history[String(Object.keys(event.mentions)[0])][parseInt(super.getContent(event)[0])-1]
+                    
+                        this.messageToResponse(api, msg)
+                    } else {
+
+                        throw 'invalid index number'
+                    }
+                } else {
+
+                    var msg = this.personal_history[String(Object.keys(event.mentions)[0])][0]
+                    
+                    this.messageToResponse(api, msg)
+                }
+            } else {
+                
+                throw 'no history'
+            }
+        } else {
+                
+            throw 'more than one mention'
         }
     }
 
@@ -49,30 +90,12 @@ module.exports = class Undelete extends Command {
                 name = ret[prop].name;
             }
 
-            this.message.body = '@' + name + ' said at ' + this.formatDateTime(msg.timestamp, -5) + ': \n\n' + msg.body;
-
-            this.message.mentions = [{
-                tag: '@' + name,
-                id: msg.senderID,
-            }];
-
-            api.sendMessage(this.message, msg.threadID, (err) => { //confirm timer was set
-                if(err) return console.error(err);
-            }, msg.messageID);
-        });
-    }
-
-    ImageMessageToResponse(api, msg) {
-        var name = '';
-
-        api.getUserInfo(msg.senderID, (err, ret) => {
-            if(err) return console.error(err);
-
-            for(var prop in ret) {
-                name = ret[prop].name;
+            if(msg.attachments == []) {
+                this.message.body = '@' + name + ' said at ' + this.formatDateTime(msg.timestamp, -5) + ': \n\n' + msg.body;
+            } else {
+                this.message.body = '@' + name + ' said at ' + this.formatDateTime(msg.timestamp, -5) + ': \n\n' + msg.body+ '\n\n' + msg.attachments;
             }
-
-            this.message.body = '@' + name + ' said at ' + this.formatDateTime(msg.timestamp, -5) + ': \n\n' + msg.body+ '\n\n' + msg.attachments;
+            
 
             this.message.mentions = [{
                 tag: '@' + name,
@@ -92,6 +115,4 @@ module.exports = class Undelete extends Command {
         var nd = new Date(utc + (3600000*offset));
         return nd.toLocaleString();
     }
-
-    
 }
