@@ -93,7 +93,13 @@ module.exports = class Undelete extends Command {
             if(msg.attachments == []) {
                 this.message.body = '@' + name + ' said at ' + this.formatDateTime(msg.timestamp, -5) + ': \n\n' + msg.body;
             } else {
-                this.message.body = '@' + name + ' said at ' + this.formatDateTime(msg.timestamp, -5) + ': \n\n' + msg.body+ '\n\n' + msg.attachments;
+                var attachments = '';
+
+                for (var image in msg.attachments) {
+                    attachments += msg.attachments[image].type + ' ' + (parseInt(image)+1) + ': \n' + msg.attachments[image].url + '\n\n'
+                }
+
+                this.message.body = '@' + name + ' said at ' + this.formatDateTime(msg.timestamp, -5) + ': \n\n' + msg.body+ '\n\n' + attachments;
             }
             
 
