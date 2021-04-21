@@ -6,6 +6,8 @@ const ThemeList = require('./src/ThemeList.js');
 const ChangeTheme = require('./src/ChangeTheme.js');
 const RemindMe = require("./src/RemindMe.js");
 const Undelete = require("./src/Undelete.js");
+var path = require('path');
+
 
 // Objective: do things that a normal messenger user can't too hard to do
 // TODO
@@ -20,9 +22,12 @@ const Undelete = require("./src/Undelete.js");
 // Undelete
 // emoji size?
 // admin privs?
+const databaseDir = path.resolve(__dirname + '/database/');
 
 login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))}, (err, api) => {
     if(err) return console.error(err);
+
+    fs.writeFileSync(databaseDir + '/appstate.json', JSON.stringify(api.getAppState())); //store cookies
 
     api.setOptions({
         listenEvents: true,
@@ -34,7 +39,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
     //start timeout timer
     const use = new Timeout(30000); //30000
 
-    threadIDs = ['4341136652627262']
+    threadIDs = ['2401681243197992']
 
     //initialize commands add the threadID of chats you want enabled
     und = new Undelete(threadIDs);
