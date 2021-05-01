@@ -1,10 +1,10 @@
 const Command = require('./Command.js');
 
-module.exports = class ExampleCommand extends Command {
+module.exports = class Kanye extends Command {
 
     constructor(ids) {
         super(ids);
-        this.term = '!ExampleCommand';
+        this.term = '!Kanye';
         this.type = 'message';
         this.needContent = false;
         this.message = {
