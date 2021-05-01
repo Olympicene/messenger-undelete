@@ -7,8 +7,6 @@ const FormData = require('form-data');
 const imageToBase64 = require('image-to-base64');
 
 
-
-
 module.exports = class Anime extends Command {
     constructor(ids) {
         super(ids);
@@ -17,17 +15,8 @@ module.exports = class Anime extends Command {
         this.needContent = false;
     }
 
-    secondsToHms(d) {
-        d = Number(d);
-        var m = Math.floor(d / 3600);
-        var s = Math.floor(d % 3600 % 60);
-    
-        var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-        var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-        return mDisplay + sDisplay; 
-    }
-
     doAction(event, api) { //abstract
+
         if(event.messageReply != []) {
 
             var url = event.messageReply.attachments[0].url;
@@ -67,7 +56,7 @@ module.exports = class Anime extends Command {
                             result.docs[0].title_native + '\n' +
                             result.docs[0].title_english + '\n' +
                             "episode: " + result.docs[0].episode + '\n' +
-                            "time: " + this.secondsToHms(result.docs[0].at) + '\n' +
+                            "time: " + super.secondsToHms(result.docs[0].at) + '\n' +
                             "confidence: " + result.docs[0].similarity * 100 + "%";
 
 

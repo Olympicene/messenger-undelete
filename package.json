@@ -21,6 +21,7 @@
     "facebook-chat-api": "^1.8.0",
     "form-data": "^2.3.3",
     "fs": "0.0.1-security",
+    "glob": "^7.1.6",
     "gm": "^1.23.1",
     "image-to-base64": "^2.2.0",
     "meme-maker": "^2.1.2",
