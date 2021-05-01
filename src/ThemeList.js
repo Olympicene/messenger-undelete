@@ -14,7 +14,7 @@ module.exports = class ThemeList extends Command {
 
     doAction(event, api) {
 
-        this.message.body = '';
+        this.message.body = ''; //dont delete
 
         for (var key in api.threadColors) {
             this.message.body += key + "\n"; //turns dictionary into string
