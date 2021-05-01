@@ -1,3 +1,4 @@
 node_modules/
 /database/credentials.json
 /database/appstate.json
+/src/image.png

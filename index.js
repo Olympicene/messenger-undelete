@@ -7,7 +7,7 @@ const Timeout = require('./src/Timeout');
 
 ////////////////////////////////////////////////////ImportCommands////////////////////////////////////////////////////
 var commandList = [];
-var ignoredList = ['Command', 'Timeout', 'Undelete'];
+var ignoredList = ['Command', 'Timeout', 'Undelete', 'ExampleCommand'];
 
 glob.sync( './src/*.js' ).forEach( function(file) {
     if(!ignoredList.map(command => './src/' + command + '.js').includes(file)) {
@@ -15,6 +15,7 @@ glob.sync( './src/*.js' ).forEach( function(file) {
     }
 });
 
+console.log(commandList);
 
 ////////////////////////////////////////////////////LoginWithCookies////////////////////////////////////////////////////
 const databaseDir = path.resolve(__dirname + '/database/');
