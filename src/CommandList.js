@@ -16,13 +16,12 @@ module.exports = class CommandList extends Command {
     doAction(event, api) {
 
         var commandList = [];
-        var ignoredList = ['Command', 'Timeout', 'Undelete', 'ExampleCommand'];
+        var ignoredList = ['Command', 'Timeout', 'Undelete', 'ExampleCommand', 'Shutdown'];
 
         glob.sync( './src/*.js' ).forEach( function(file) {
             if(!ignoredList.map(command => './src/' + command + '.js').includes(file)) {
                 commandList.push(file.slice(6,-3))
             }
-            
         });
 
         commandList = commandList.map(command => '!' + command + '\n');

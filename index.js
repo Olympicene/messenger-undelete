@@ -7,7 +7,7 @@ const Timeout = require('./src/Timeout');
 
 ////////////////////////////////////////////////////ImportCommands////////////////////////////////////////////////////
 var commandList = [];
-var ignoredList = ['Command', 'Timeout', 'Undelete', 'ExampleCommand'];
+var ignoredList = ['Command', 'Timeout', 'Undelete', 'ExampleCommand', 'Shutdown'];
 
 glob.sync( './src/*.js' ).forEach( function(file) {
     if(!ignoredList.map(command => './src/' + command + '.js').includes(file)) {
@@ -38,7 +38,6 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
 
     //start timeout timer
     const use = new Timeout(30000); //30000
-
 
     // add the threadID of chats you want enabled
     threadIDs = ['2401681243197992', '4432056806822983', '4341136652627262']
