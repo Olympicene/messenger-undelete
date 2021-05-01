@@ -1,11 +1,11 @@
 const Command = require('./Command.js');
 const fetch = require("node-fetch");
 
-module.exports = class Kanye extends Command {
+module.exports = class ExampleCommand extends Command {
 
     constructor(ids) {
         super(ids);
-        this.term = '!Kanye';
+        this.term = '!ExampleCommand';
         this.type = 'message';
         this.needContent = false;
         this.message = {
