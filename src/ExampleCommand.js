@@ -1,4 +1,5 @@
 const Command = require('./Command.js');
+const fetch = require("node-fetch");
 
 module.exports = class Kanye extends Command {
 
@@ -13,6 +14,9 @@ module.exports = class Kanye extends Command {
     }
 
     doAction(event, api) {
+
+        
+
         api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
             if(err) return console.error(err);
         });
