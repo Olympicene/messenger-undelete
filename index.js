@@ -6,22 +6,12 @@ const ThemeList = require('./src/ThemeList.js');
 const ChangeTheme = require('./src/ChangeTheme.js');
 const RemindMe = require("./src/RemindMe.js");
 const Undelete = require("./src/Undelete.js");
+const Anime = require("./src/Anime.js");
+const Shutdown = require("./src/Shutdown.js")
 var path = require('path');
 
 
-// Objective: do things that a normal messenger user can't too hard to do
-// TODO
-// Change Emoji Capability //can add emojis not normally able ot get
-// Change Theme Capability //able to get unknown themes?
-// List Possible Themes    //functionality
-// RemindMe
-// ListCommands             
-// mass add remove users?  
 
-// Screenshot generator (HTML to screenshot)
-// Undelete
-// emoji size?
-// admin privs?
 const databaseDir = path.resolve(__dirname + '/database/');
 
 login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))}, (err, api) => {
@@ -35,11 +25,10 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
         forceLogin: true,
     })
 
-
     //start timeout timer
     const use = new Timeout(30000); //30000
 
-    threadIDs = ['2401681243197992']
+    threadIDs = ['2401681243197992', '4432056806822983']
 
     //initialize commands add the threadID of chats you want enabled
     und = new Undelete(threadIDs);
@@ -55,6 +44,8 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
 
         if(!use.inTimeout(event.threadID)) {
 
+            new Shutdown(threadIDs).listen(event, api, use);
+            new Anime(threadIDs).listen(event, api, use);
             new ThemeList(threadIDs).listen(event, api, use);
             new ChangeEmoji(threadIDs).listen(event, api, use);
             new ChangeTheme(threadIDs).listen(event, api, use);
