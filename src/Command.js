@@ -45,7 +45,7 @@ module.exports = class Commands {
 
     checkEvent(event) { //check if message type and term is valid
         if(event.type == this.type && this.threadIDs.includes(event.threadID)) {
-            if(event.body.split(' ')[0] == this.term) {
+            if(event.body.split(' ')[0].toUpperCase() == this.termtoUpperCase()) {
                 return true; 
             }
         }
