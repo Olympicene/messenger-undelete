@@ -53,9 +53,7 @@ module.exports = class Commands {
     }
 
     getContent(event) { //gets added content of command
-        if(event.type == this.type) {
-            return(event.body.split(" ").slice(1));
-        }
+        return(event.body.split(" ").slice(1));
     }
 
     isContent(event){ //checks if there is no added content

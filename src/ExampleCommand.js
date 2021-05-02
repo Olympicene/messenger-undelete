@@ -15,8 +15,6 @@ module.exports = class ExampleCommand extends Command {
 
     doAction(event, api) {
 
-        
-
         api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
             if(err) return console.error(err);
         });
