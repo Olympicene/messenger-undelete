@@ -23,11 +23,8 @@ module.exports = class TheUrge extends Command {
                 .on('close', callback)
             })
         }
-
-        var text = super.cleanInput(event.messageReply.body).split(' ').join('_').replace(/\/{2,}/g, "/"); //clean split spaces into _ remove all other /
         
-        var url = 'https://api.memegen.link/images/custom/_' + text + '.png?background=https://img.cinemablend.com/filter:scale/quill/9/4/0/5/8/8/940588e13003e79003abb91b39b50d9e48b759c0.jpg?mw=600';
-
+        var url = 'https://i.ibb.co/QdZ8BDb/165670278-1353254831738443-1968237180024515079-n.jpg';
         const path = './src/image.png'
 
         download(url, path, () => {
