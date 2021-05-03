@@ -5,7 +5,7 @@ module.exports = class Undelete extends Command {
     constructor(ids) {
         super(ids);
         this.term = '!Undelete';
-        this.type = 'message';
+        this.type = ['message', 'message_reply'];
         this.needContent = true;
         this.history = [];
         this.personal_history = {};

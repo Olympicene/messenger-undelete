@@ -9,7 +9,7 @@ module.exports = class RemindMe extends Command {
     constructor(ids) {
         super(ids);
         this.term = '!RemindMe';
-        this.type = 'message';
+        this.type = ['message', 'message_reply'];
         this.needContent = true;
     }
 
@@ -30,7 +30,7 @@ module.exports = class RemindMe extends Command {
                     name = ret[prop].name;
                 }
 
-                this.message.body = 'will remind ' + name + ' in ' + parse(time) + ' milliseconds'
+                this.message.body = 'will remind ' + name + ' in ' + super.secondsToHms(parse(time)/1000) + ' and say: \"' + reminder + '\"'
 
                 api.sendMessage(this.message, event.threadID, (err) => { //confirm timer was set
                     if(err) return console.error(err);

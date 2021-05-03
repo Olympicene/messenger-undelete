@@ -6,7 +6,7 @@ module.exports = class ExampleCommand extends Command {
     constructor(ids) {
         super(ids);
         this.term = '!ExampleCommand';
-        this.type = 'message';
+        this.type = ['message', 'message_reply'];
         this.needContent = false;
         this.message = {
             body: '',

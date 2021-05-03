@@ -6,7 +6,7 @@ module.exports = class Shutdown extends Command {
     constructor(ids) {
         super(ids);
         this.term = '!Shutdown';
-        this.type = 'message';
+        this.type = ['message', 'message_reply'];
         this.needContent = false;
     }
 

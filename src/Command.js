@@ -5,7 +5,7 @@ const runes = require('runes');
 module.exports = class Commands {
     constructor(ids) {
         this.term = '!command';
-        this.type = 'message_reply';
+        this.type = ['message', 'message_reply'];
         this.needContent = false;
         this.message = {
             body: '',
@@ -44,7 +44,7 @@ module.exports = class Commands {
     };
 
     checkEvent(event) { //check if message type and term is valid
-        if(event.type == this.type && this.threadIDs.includes(event.threadID)) {
+        if((this.type.indexOf(event.type) > -1) && this.threadIDs.includes(event.threadID)) {
             if(event.body.split(' ')[0].toUpperCase() == this.term.toUpperCase()) {
                 return true; 
             }
