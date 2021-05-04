@@ -40,7 +40,7 @@ login({appState: JSON.parse(fs.readFileSync('database/appstate.json', 'utf8'))},
     const use = new Timeout(10000); //30000 used to be
 
     // add the threadID of chats you want enabled
-    threadIDs = ['2401681243197992', '4432056806822983', '4341136652627262']
+    threadIDs = ['2401681243197992', '4432056806822983', '4341136652627262', '4258360417509656']
 
     //dead code revisit later
     //und = new Undelete(threadIDs);
