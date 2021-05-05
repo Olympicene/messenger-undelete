@@ -1,4 +1,4 @@
 node_modules/
-/database/credentials.json
+/database/credentials-reddit.json
 /database/appstate.json
 /src/image.png
