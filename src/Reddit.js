@@ -72,7 +72,7 @@ module.exports = class Reddit extends Command {
                         this.message.body += post.url
                     }
                 } else {
-                    this.message.body = "that subreddit is 18+ im not doing that again"
+                    this.message.body = "that post is 18+ im not doing that again"
                 }
             }
             catch (e) {
