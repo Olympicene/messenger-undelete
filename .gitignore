@@ -2,3 +2,4 @@ node_modules/
 /database/credentials-reddit.json
 /database/appstate.json
 /src/image.png
+/src/video.mp4

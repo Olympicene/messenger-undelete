@@ -1,5 +1,6 @@
 const Command = require('./Command.js');
 const fetch = require('node-fetch');
+const request = require('request');
 const fs = require('fs');
 var path = require('path');
 const snoowrap = require('snoowrap');
@@ -22,6 +23,15 @@ module.exports = class Reddit extends Command {
     }  
 
     async getSub(sub, event, api) {
+        var url = ''
+        const download = (url, path, callback) => {
+            request.head(url, (err, res, body) => {
+              request(url)
+                .pipe(fs.createWriteStream(path))
+                .on('close', callback)
+            })
+        }
+
         const databaseDir = path.resolve(__dirname + '/../database/');
         const credentials = JSON.parse(fs.readFileSync(databaseDir + '/credentials-reddit.json', 'utf8')); //gets credentials
 
@@ -40,16 +50,49 @@ module.exports = class Reddit extends Command {
             console.log(topPosts[0].title)
             console.log(topPosts[0].selftext)
 
-            this.message.body = topPosts[0].title + '\n' + topPosts[0].selftext
-            //console.log(topPosts[0].secure_media)
+            if(topPosts[0].secure_media == null)
+            {
+                const path = './src/image.png'
+
+                this.message.body = topPosts[0].title + '\n' + topPosts[0].selftext
+
+                url = topPosts[0].url
+                download(url, path, () => {
+                    console.log('✅ Done!')
+
+                    this.message.attachment = fs.createReadStream(path);
+
+                    api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
+                        if(err) return console.error(err);
+                    });
+                });
+            } else {
+
+                const path = './src/video.mp4'
+
+                this.message.body = topPosts[0].title + '\n' + topPosts[0].selftext
+            
+                url = topPosts[0].secure_media.reddit_video.fallback_url
+
+                download(url, path, () => {
+                    console.log('✅ Done!')
+
+                    this.message.attachment = fs.createReadStream(path);
+
+                    api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
+                        if(err) return console.error(err);
+                    });
+                });
+
+            }
         }
         catch (e) {
             console.log(e)
             this.message.body = e
         }
 
-        api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-            if(err) return console.error(err);
-        });
+        // api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
+        //     if(err) return console.error(err);
+        // });
     }
 }
