@@ -23,7 +23,7 @@ module.exports = class Reddit extends Command {
     }  
 
     async getSub(sub, event, api) {
-        var url = ''
+       
         const download = (url, path, callback) => {
             request.head(url, (err, res, body) => {
               request(url)
@@ -43,56 +43,61 @@ module.exports = class Reddit extends Command {
             password: credentials.password,
         });
 
-        const subreddit = await r.getSubreddit(sub);
-        const topPosts = await subreddit.getTop({time: 'day', limit: 1});
+
+        var thing = ''
+        var url = ''
 
         try {
-            console.log(topPosts[0].title)
-            console.log(topPosts[0].selftext)
+            const subreddit = await r.getSubreddit(sub);
+            const topPosts = await subreddit.getTop({time: 'day', limit: 2});
+        
+            const post = topPosts[0]
 
-            if(topPosts[0].secure_media == null)
-            {
-                const path = './src/image.png'
+            try {
+                if (!post.quarantine && !post.over_18) {
 
-                this.message.body = topPosts[0].title + '\n' + topPosts[0].selftext
+                    this.message.body = post.title + '\n' + post.selftext
 
-                url = topPosts[0].url
-                download(url, path, () => {
-                    console.log('✅ Done!')
+                    if (post.domain == 'v.redd.it') {
+                        thing = './src/video.mp4'
+                
+                        url = post.secure_media.reddit_video.fallback_url
 
-                    this.message.attachment = fs.createReadStream(path);
+                    } else if (post.domain == 'i.redd.it') {
+                        thing = './src/image.png'
 
-                    api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-                        if(err) return console.error(err);
-                    });
-                });
-            } else {
+                        url = post.url
 
-                const path = './src/video.mp4'
-
-                this.message.body = topPosts[0].title + '\n' + topPosts[0].selftext
-            
-                url = topPosts[0].secure_media.reddit_video.fallback_url
-
-                download(url, path, () => {
-                    console.log('✅ Done!')
-
-                    this.message.attachment = fs.createReadStream(path);
-
-                    api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-                        if(err) return console.error(err);
-                    });
-                });
-
+                    } else {
+                        this.message.body += post.url
+                    }
+                } else {
+                    this.message.body = "that subreddit is 18+ im not doing that again"
+                }
             }
-        }
-        catch (e) {
-            console.log(e)
-            this.message.body = e
+            catch (e) {
+                this.message.body = e
+            }
+
+        } catch (e) {
+            this.message.body = "something has gone horribly wrong. what cursed subreddit did you ask for?"
         }
 
-        // api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-        //     if(err) return console.error(err);
-        // });
+
+        if (thing != '') {
+            download(url, thing, () => {
+                console.log('✅ Done!')
+    
+                this.message.attachment = fs.createReadStream(thing);
+
+                api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
+                    if(err) return console.error(err);
+                });
+            });
+        } else {
+            api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
+                if(err) return console.error(err);
+            });
+        }
     }
 }
