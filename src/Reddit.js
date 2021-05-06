@@ -1,6 +1,6 @@
 const Command = require('./Command.js');
-const fetch = require("node-fetch");
-const fs = require("fs");
+const fetch = require('node-fetch');
+const fs = require('fs');
 var path = require('path');
 const snoowrap = require('snoowrap');
 
@@ -18,64 +18,38 @@ module.exports = class Reddit extends Command {
     }
 
     doAction(event, api) {
+        this.getSub(super.getContent(event)[0], event, api)
+    }  
 
+    async getSub(sub, event, api) {
         const databaseDir = path.resolve(__dirname + '/../database/');
-
         const credentials = JSON.parse(fs.readFileSync(databaseDir + '/credentials-reddit.json', 'utf8')); //gets credentials
 
-        const fileName = databaseDir + '/credentials-reddit.json'
-        const file = require(fileName);
+        const r = new snoowrap({
+            userAgent: credentials.userAgent,
+            clientId: credentials.clientId,
+            clientSecret: credentials.clientSecret,
+            username: credentials.username,
+            password: credentials.password,
+        });
 
+        const subreddit = await r.getSubreddit(sub);
+        const topPosts = await subreddit.getTop({time: 'day', limit: 1});
 
+        try {
+            console.log(topPosts[0].title)
+            console.log(topPosts[0].selftext)
 
-        if(new Date().getTime() - file.access.time > 3600000)
-        {
-
-            fetch("https://www.reddit.com/api/v1/access_token", {
-                body: "grant_type=password&username=" + credentials.username + "&password=" + credentials.password,
-                headers: {
-                    "Authorization": credentials.clientId + ":" + credentials.clientSecret,
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                method: "POST"
-            })
-            .then((res) => res.json())
-            .then((result) => {
-                console.log(result)
-            });
-
-
-            // console.log(r)
-
-            // file.access.time = new Date().getTime();
-            // file.access.token = r.access_token 
-
-            // fs.writeFile(fileName, JSON.stringify(file), function writeJSON(err) {
-            //     if (err) return console.log(err);
-
-            //     console.log(JSON.stringify(file, null, 2));
-            //     console.log('writing to ' + fileName);
-            // });
+            this.message.body = topPosts[0].title + '\n' + topPosts[0].selftext
+            //console.log(topPosts[0].secure_media)
+        }
+        catch (e) {
+            console.log(e)
+            this.message.body = e
         }
 
-
-
-                // const r = new snoowrap({
-        //     userAgent: credentials.userAgent,
-        //     clientId: credentials.clientId,
-        //     clientSecret: credentials.clientSecret,
-        //     username: credentials.username,
-        //     password: credentials.password,
-        // });
-
-        //r.getSubreddit('snoowrap').getTop({time: 'day'}).then(console.log)
-        // .then((res) => res.json())
-        // .then((result) => {
-        //     console.log(result[0])
-        // });
-
-        // api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-        //     if(err) return console.error(err);
-        // });
-    }  
+        api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
+            if(err) return console.error(err);
+        });
+    }
 }
