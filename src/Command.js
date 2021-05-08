@@ -1,6 +1,10 @@
 const { Console } = require("console");
 const fetch = require('node-fetch');
+var path = require('path');
 const fs = require('fs');
+var ffmpeg = require('fluent-ffmpeg');
+
+
 
 
 module.exports = class Commands {
@@ -43,7 +47,6 @@ module.exports = class Commands {
     send(event, api, message) {
         api.sendMessage(message, event.threadID, (err) => { //send thread stuff
             if(err) return console.error(err);
-
             //console.log(message); //debug
         });
     }
@@ -89,6 +92,25 @@ module.exports = class Commands {
             res.body.on("error", reject);
             fileStream.on("finish", resolve);
         });
+    }
+
+    async combine() {
+        const mediaDir = path.resolve(__dirname + '/../media/'); //directory the shibe file is going to
+
+        await new Promise((resolve, reject) => {
+            ffmpeg()
+                .addInput(mediaDir + '/video.mp4')
+                .addInput(mediaDir + '/audio.mp4')
+                .outputOptions([
+                    '-c copy',
+                    '-map 0:v:0',
+                    '-map 1:a:0'
+                ])
+                .output(mediaDir + '/outputfile.mp4')
+                .on('end', resolve)
+                .on("error", reject)
+                .run()
+        });   
     }
 
 }

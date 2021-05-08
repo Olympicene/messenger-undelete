@@ -20,6 +20,7 @@
     "canvas": "^2.6.1",
     "facebook-chat-api": "^1.8.0",
     "filesize": "^6.3.0",
+    "fluent-ffmpeg": "^2.1.2",
     "form-data": "^2.3.3",
     "fs": "0.0.1-security",
     "glob": "^7.1.6",

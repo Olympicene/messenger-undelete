@@ -1,9 +1,8 @@
 const Command = require('./Command.js');
-const fetch = require('node-fetch');
-const request = require('request');
 const fs = require('fs');
 var path = require('path');
 const snoowrap = require('snoowrap');
+var ffmpeg = require('fluent-ffmpeg');
 
 
 module.exports = class Reddit extends Command {
@@ -18,22 +17,13 @@ module.exports = class Reddit extends Command {
         }
     }
 
-    doAction(event, api) {
-        this.getSub(super.getContent(event)[0], event, api)
-    }  
+    async doAction(event, api) {
 
-    async getSub(sub, event, api) {
-       
-        const download = (url, path, callback) => {
-            request.head(url, (err, res, body) => {
-              request(url)
-                .pipe(fs.createWriteStream(path))
-                .on('close', callback)
-            })
-        }
-
+        const mediaDir = path.resolve(__dirname + '/../media/'); //directory the shibe file is going to
         const databaseDir = path.resolve(__dirname + '/../database/');
         const credentials = JSON.parse(fs.readFileSync(databaseDir + '/credentials-reddit.json', 'utf8')); //gets credentials
+        let file = '';
+        let url = '';
 
         const r = new snoowrap({
             userAgent: credentials.userAgent,
@@ -43,15 +33,10 @@ module.exports = class Reddit extends Command {
             password: credentials.password,
         });
 
-
-        var thing = ''
-        var url = ''
-
         try {
-            const subreddit = await r.getSubreddit(sub);
-            const topPosts = await subreddit.getTop({time: 'day', limit: 2});
-        
-            const post = topPosts[0]
+            const subreddit = await r.getSubreddit(super.getContent(event)[0]); //funny
+            const topPosts = await subreddit.getTop({time: 'day', limit: 1});
+            const post = topPosts[0];
 
             try {
                 if (!post.quarantine && !post.over_18) {
@@ -59,45 +44,43 @@ module.exports = class Reddit extends Command {
                     this.message.body = post.title + '\n' + post.selftext
 
                     if (post.domain == 'v.redd.it') {
-                        thing = './src/video.mp4'
-                
-                        url = post.secure_media.reddit_video.fallback_url
+
+                        file = '/audio.mp4';
+                        url = post.url + '/DASH_audio.mp4';
+                        await super.downloadFile(url, mediaDir + file)
+
+                        file = '/video.mp4';
+                        url = post.secure_media.reddit_video.fallback_url;
+                        await super.downloadFile(url, mediaDir + file)
+
+                        await super.combine();
+
+                        this.message.attachment = fs.createReadStream(mediaDir + '/outputfile.mp4');
 
                     } else if (post.domain == 'i.redd.it') {
-                        thing = './src/image.png'
 
-                        url = post.url
+                        file = '/image.png';
+                        url = post.url;
+                        await super.downloadFile(url, mediaDir + file)
+
+                        this.message.attachment = fs.createReadStream(mediaDir + file);
 
                     } else {
                         this.message.body += post.url
                     }
                 } else {
-                    this.message.body = "that post is 18+ im not doing that again"
+                    this.message.body = "that post is 18+"
                 }
             }
-            catch (e) {
-                this.message.body = e
+            catch (err) {
+                this.message.body = `Unable to get info from the sub: ${err}`;   
+                console.error(`${err}`)             
             }
-
-        } catch (e) {
-            this.message.body = "something has gone horribly wrong. what cursed subreddit did you ask for?"
+        } catch (err) {
+            this.message.body = `Unable to find the sub: ${err}`;
+            console.error(`${err}`)
         }
 
-
-        if (thing != '') {
-            download(url, thing, () => {
-                console.log('✅ Done!')
-    
-                this.message.attachment = fs.createReadStream(thing);
-
-                api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-                    if(err) return console.error(err);
-                });
-            });
-        } else {
-            api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-                if(err) return console.error(err);
-            });
-        }
-    }
+        super.send(event,api, this.message);
+    }  
 }
