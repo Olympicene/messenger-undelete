@@ -11,7 +11,7 @@ module.exports = class Anime extends Command {
     constructor(ids) {
         super(ids);
         this.term = '!Anime';
-        this.type = 'message_reply';
+        this.type = ['message_reply'];
         this.needContent = false;
     }
 

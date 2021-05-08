@@ -18,12 +18,8 @@ module.exports = class Kanye extends Command {
         fetch("https://api.kanye.rest/")
         .then((res) => res.json())
         .then((result) => {
-        
             this.message.body = result.quote + '\n\n' + '-Kanye West';
-
-            api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-                if(err) return console.error(err);
-            });
+            super.send(event, api, this.message);
         });
     }  
 }

@@ -1,7 +1,7 @@
 const Command = require('./Command.js');
-const fetch = require("node-fetch");
-const request = require('request');
 const fs = require('fs');
+const fetch = require("node-fetch");
+const path = require('path');
 
 module.exports = class Soyjack extends Command {
     constructor(ids) {
@@ -16,32 +16,17 @@ module.exports = class Soyjack extends Command {
 
     doAction(event, api) {
 
-        const download = (url, path, callback) => {
-            request.head(url, (err, res, body) => {
-              request(url)
-                .pipe(fs.createWriteStream(path))
-                .on('close', callback)
-            })
-        }
-
         var text = super.cleanInput(event.messageReply.body).split(' ').join('_').replace(/\/{2,}/g, "/"); //clean split spaces into _ remove all other /
-        
+        const mediaDir = path.resolve(__dirname + '/../media/' + `soy.png`); //directory the shibe file is going to
         var url = 'https://api.memegen.link/images/custom/_' + text + '.png?background=https://www.dictionary.com/e/wp-content/uploads/2018/05/soyboy-2.png';
 
-        const path = './src/image.png'
-
-        download(url, path, () => {
-            console.log('✅ Done!')
-
-            this.message.attachment = fs.createReadStream(__dirname + '/image.png');
-
-            api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-                if(err) return console.error(err);
-            });
+        super.downloadFile(url, mediaDir)
+        .then(() => {
+            this.message.attachment = fs.createReadStream(mediaDir); //get download
+            super.send(event, api, this.message)
+        })
+        .catch((err) => {
+            console.error(`Could not get data from ${mediaDir} due to ${err}`)
         });
-
-        // api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-        //     if(err) return console.error(err);
-        // });
-    }  
+    }
 }

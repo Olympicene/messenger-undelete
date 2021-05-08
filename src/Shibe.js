@@ -16,7 +16,6 @@ module.exports = class Shibe extends Command {
     }
 
     async doAction(event, api) {
-
         const mediaDir = path.resolve(__dirname + '/../media/' + `shibe.png`); //directory the shibe file is going to
         const apiFetch = "http://shibe.online/api/shibes?" //api that im calling
 

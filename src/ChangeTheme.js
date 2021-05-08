@@ -21,6 +21,7 @@ module.exports = class ChangeTheme extends Command {
             api.changeThreadColor(api.threadColors[key], event.threadID, (err) => { //change thread emoji
                 if(err) return console.error(err);
             });
+            
         } else {
             throw "color key is invalid"
         }

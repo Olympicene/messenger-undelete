@@ -12,8 +12,6 @@ module.exports = class ChangeEmoji extends Command {
     }
 
     doAction(event, api) {
-        console.log('got here')
-
         if(this.patt.test(super.getContent(event)[0]) && runes(super.getContent(event)[0]).length == 1) {
             api.changeThreadEmoji(super.getContent(event)[0], event.threadID, (err) => { //change thread emoji
                 if(err) return console.error(err);

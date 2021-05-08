@@ -1,20 +1,16 @@
 const Command = require('./Command.js');
-const fetch = require("node-fetch");
 
-module.exports = class ExampleCommand extends Command {
+module.exports = class Uptime extends Command {
 
     constructor(ids) {
         super(ids);
-        this.term = '!ExampleCommand';
+        this.term = '!Uptime';
         this.type = ['message', 'message_reply'];
         this.needContent = false;
-        this.message = {
-            body: '',
-        }
     }
 
     doAction(event, api) {
-
+        this.message.body = 'Olympicene/messenger-helper uptime: ' + super.secondsToHms(process.uptime());
         super.send(event, api, this.message);
     }  
 }

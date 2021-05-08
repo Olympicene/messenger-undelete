@@ -1,7 +1,7 @@
 const Command = require('./Command.js');
-const fetch = require("node-fetch");
-const request = require('request');
 const fs = require('fs');
+const path = require('path');
+
 
 module.exports = class TheUrge extends Command {
     constructor(ids) {
@@ -16,29 +16,21 @@ module.exports = class TheUrge extends Command {
 
     doAction(event, api) {
 
-        const download = (url, path, callback) => {
-            request.head(url, (err, res, body) => {
-              request(url)
-                .pipe(fs.createWriteStream(path))
-                .on('close', callback)
-            })
-        }
-        
+        const mediaDir = path.resolve(__dirname + '/../media/' + `urge.png`); //directory the shibe file is going to
         var url = 'https://i.ibb.co/QdZ8BDb/165670278-1353254831738443-1968237180024515079-n.jpg';
-        const path = './src/image.png'
 
-        download(url, path, () => {
-            console.log('✅ Done!')
-
-            this.message.attachment = fs.createReadStream(__dirname + '/image.png');
-
-            api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-                if(err) return console.error(err);
+        if (fs.existsSync(mediaDir)) {
+            this.send(event, api, mediaDir)
+        } else {
+            super.downloadFile(url, mediaDir)
+            .then(() => {
+                this.send(event, api, mediaDir)
             });
-        });
-
-        // api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-        //     if(err) return console.error(err);
-        // });
+        }
     }  
+
+    send(event, api, mediaDir) {
+        this.message.attachment = fs.createReadStream(mediaDir);
+        super.send(event, api, this.message);
+    }
 }

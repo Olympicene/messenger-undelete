@@ -19,10 +19,13 @@
   "dependencies": {
     "canvas": "^2.6.1",
     "facebook-chat-api": "^1.8.0",
+    "filesize": "^6.3.0",
     "form-data": "^2.3.3",
     "fs": "0.0.1-security",
     "glob": "^7.1.6",
     "gm": "^1.23.1",
+    "http": "^0.0.1-security",
+    "https": "^1.0.0",
     "image-to-base64": "^2.2.0",
     "meme-maker": "^2.1.2",
     "mongodb": "^3.6.4",
