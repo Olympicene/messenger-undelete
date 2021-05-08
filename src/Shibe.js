@@ -1,13 +1,13 @@
 const Command = require('./Command.js');
-const fetch = require("node-fetch");
-const request = require('request');
 const fs = require('fs');
+const fetch = require("node-fetch");
+const path = require('path');
 
 module.exports = class Shibe extends Command {
 
     constructor(ids) {
         super(ids);
-        this.term = '!Shibe';
+        this.term = `!Shibe`;
         this.type = ['message', 'message_reply'];
         this.needContent = false;
         this.message = {
@@ -15,35 +15,28 @@ module.exports = class Shibe extends Command {
         }
     }
 
-    doAction(event, api) {
+    async doAction(event, api) {
 
-        const download = (url, path, callback) => {
-            request.head(url, (err, res, body) => {
-              request(url)
-                .pipe(fs.createWriteStream(path))
-                .on('close', callback)
-            })
-        }
+        const mediaDir = path.resolve(__dirname + '/../media/' + `shibe.png`); //directory the shibe file is going to
+        const apiFetch = "http://shibe.online/api/shibes?" //api that im calling
 
-        fetch("http://shibe.online/api/shibes?")
+        fetch(apiFetch)
         .then((res) => res.json())
         .then((result) => {
-        
-            var url = result[0];
-            const path = './src/image.png'
 
-            download(url, path, () => {
-                console.log('✅ Done!')
-    
-                this.message.attachment = fs.createReadStream(__dirname + '/image.png');
-    
-                api.sendMessage(this.message, event.threadID, (err) => { //send thread stuff
-                    if(err) return console.error(err);
-                });
+            var url = result[0]; //url of image 
+
+            super.downloadFile(url, mediaDir) //download image
+            .then(() => {
+                this.message.attachment = fs.createReadStream(mediaDir); //get download
+                super.send(event, api, this.message); //send
+            })
+            .catch((err) => {
+                console.error(`Could not get data from ${mediaDir} due to ${err}`)
             });
-
-
-
+        })
+        .catch((err) => {
+                console.error(`Could not get data from ${apiFetch} due to ${err}`)
         });
     }  
 }

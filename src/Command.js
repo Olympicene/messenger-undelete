@@ -1,5 +1,6 @@
 const { Console } = require("console");
-const runes = require('runes');
+const fetch = require('node-fetch');
+const fs = require('fs');
 
 
 module.exports = class Commands {
@@ -39,6 +40,14 @@ module.exports = class Commands {
         }
     }
 
+    send(event, api, message) {
+        api.sendMessage(message, event.threadID, (err) => { //send thread stuff
+            if(err) return console.error(err);
+
+            //console.log(message); //debug
+        });
+    }
+
     doAction(event, api) { //abstract
         throw "Abstract method not implemented";
     };
@@ -72,6 +81,15 @@ module.exports = class Commands {
                !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
     }
 
+    async downloadFile(url, path) {
+        const res = await fetch(url);
+        const fileStream = fs.createWriteStream(path);
+        await new Promise((resolve, reject) => {
+            res.body.pipe(fileStream);
+            res.body.on("error", reject);
+            fileStream.on("finish", resolve);
+        });
+    }
 
 }
 
