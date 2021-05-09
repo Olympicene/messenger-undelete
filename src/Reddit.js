@@ -2,7 +2,6 @@ const Command = require('./Command.js');
 const fs = require('fs');
 var path = require('path');
 const snoowrap = require('snoowrap');
-var ffmpeg = require('fluent-ffmpeg');
 
 
 module.exports = class Reddit extends Command {
@@ -26,11 +25,11 @@ module.exports = class Reddit extends Command {
         let url = '';
 
         const r = new snoowrap({
-            userAgent: credentials.userAgent,
-            clientId: credentials.clientId,
-            clientSecret: credentials.clientSecret,
-            username: credentials.username,
-            password: credentials.password,
+            userAgent: credentials.reddit.userAgent,
+            clientId: credentials.reddit.clientId,
+            clientSecret: credentials.reddit.clientSecret,
+            username: credentials.reddit.username,
+            password: credentials.reddit.password,
         });
 
         try {

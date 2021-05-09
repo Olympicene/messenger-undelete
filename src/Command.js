@@ -44,10 +44,13 @@ module.exports = class Commands {
         }
     }
 
-    send(event, api, message) {
-        api.sendMessage(message, event.threadID, (err) => { //send thread stuff
+    async send(event, api, message) {
+        await new Promise((resolve) => {
+            api.sendMessage(message, event.threadID, (err) => { //send thread stuff
             if(err) return console.error(err);
-            //console.log(message); //debug
+            
+            resolve();
+            });
         });
     }
 
