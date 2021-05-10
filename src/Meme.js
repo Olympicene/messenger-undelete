@@ -17,18 +17,9 @@ module.exports = class Meme extends Command {
 
     doAction(event, api) {
 
-        // const download = (url, path, callback) => {
-        //     request.head(url, (err, res, body) => {
-        //       request(url)
-        //         .pipe(fs.createWriteStream(path))
-        //         .on('close', callback)
-        //     })
-        // }
-
         // if(event.messageReply != [] && event.messageReply.attachments[0].type == 'photo') {
     
         //     var text = super.cleanInput(super.getContent(event).join(' ')).split(' ').join('_').replace(/\/{2,}/g, "/"); //clean split spaces into _ remove all other /
-            
         //     var url = 'https://api.memegen.link/images/custom/_' + text + '.png?background=' + event.messageReply.attachments[0].url;
     
         //     console.log(url)

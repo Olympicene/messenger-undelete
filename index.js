@@ -9,7 +9,7 @@ const Timeout = require('./src/Timeout');
 var commandList = [];
 var ignoredList = ['Command', 'Timeout', 'Undelete', 'ExampleCommand', 'Shutdown', 'Meme'];
 
-glob.sync( './src/*.js' ).forEach( function(file) {
+glob.sync( './src/*.js' ).forEach( (file) => {
     if(!ignoredList.map(command => './src/' + command + '.js').includes(file)) {
         commandList.push(require(file));
     }
