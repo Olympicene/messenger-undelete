@@ -5,6 +5,7 @@ module.exports = class ChangeEmoji extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!ChangeEmoji";
+    this.description = "[emoji]";
     this.type = ["message", "message_reply"];
     this.needContent = true;
     this.patt = new RegExp(

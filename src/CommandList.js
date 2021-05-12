@@ -5,6 +5,7 @@ module.exports = class CommandList extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!CommandList";
+    this.description = " ";
     this.type = ["message", "message_reply"];
     this.needContent = false;
     this.message = {
@@ -22,16 +23,27 @@ module.exports = class CommandList extends Command {
       "Shutdown",
       "Meme",
     ];
-
-    glob.sync("./src/*.js").forEach(function (file) {
+    
+    glob.sync("./src/*.js").forEach((file) => {
       if (
         !ignoredList.map((command) => "./src/" + command + ".js").includes(file)
       ) {
-        commandList.push(file.slice(6, -3));
+        commandList.push(require("./" + file.slice(6, -3) + ".js"));
       }
     });
 
-    commandList = commandList.map((command) => "!" + command + "\n");
+    for (var command in commandList) {
+      var com = new commandList[command](threadIDs)
+      commandList[command] = com.term + ' ' + com.description + '\n'
+    }
+ 
+    // glob.sync("./src/*.js").forEach(function (file) {
+    //   if (!ignoredList.map((command) => "./src/" + command + ".js").includes(file)) {
+    //     commandList.push(file.slice(6, -3));
+    //   }
+    // });
+
+    // commandList = commandList.map((command) => "!" + command + "\n");
 
     for (var command in commandList) {
       this.message.body += commandList[command];

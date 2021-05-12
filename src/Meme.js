@@ -7,6 +7,7 @@ module.exports = class Meme extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!Meme";
+    this.description = " ";
     this.type = ["message", "message_reply"];
     this.needContent = true;
     this.message = {

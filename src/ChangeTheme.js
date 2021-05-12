@@ -4,6 +4,7 @@ module.exports = class ChangeTheme extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!ChangeTheme";
+    this.description = "[theme]";
     this.type = ["message", "message_reply"];
     this.needContent = true;
     this.message = {

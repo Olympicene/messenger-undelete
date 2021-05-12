@@ -6,6 +6,7 @@ module.exports = class TheUrge extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!TheUrge";
+    this.description = "";
     this.type = ["message", "message_reply"];
     this.needContent = false;
     this.message = {

@@ -7,6 +7,7 @@ module.exports = class TikTok extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!TikTok";
+    this.description = "[hashtag]";
     this.type = ["message", "message_reply"];
     this.needContent = true;
     this.message = {

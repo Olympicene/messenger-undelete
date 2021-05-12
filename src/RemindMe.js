@@ -7,6 +7,7 @@ module.exports = class RemindMe extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!RemindMe";
+    this.description = "[time] [message]";
     this.type = ["message", "message_reply"];
     this.needContent = true;
   }

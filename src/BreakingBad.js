@@ -5,6 +5,7 @@ module.exports = class BreakingBad extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!BreakingBad";
+    this.description = " ";
     this.type = ["message", "message_reply"];
     this.needContent = false;
     this.message = {

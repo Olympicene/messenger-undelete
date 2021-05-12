@@ -7,6 +7,7 @@ module.exports = class Shibe extends Command {
   constructor(ids) {
     super(ids);
     this.term = `!Shibe`;
+    this.description = " ";
     this.type = ["message", "message_reply"];
     this.needContent = false;
     this.message = {
@@ -23,8 +24,7 @@ module.exports = class Shibe extends Command {
       .then((result) => {
         var url = result[0]; //url of image
 
-        super
-          .downloadFile(url, mediaDir) //download image
+        super.downloadFile(url, mediaDir) //download image
           .then(() => {
             this.message.attachment = fs.createReadStream(mediaDir); //get download
             super.send(event, api, this.message); //send

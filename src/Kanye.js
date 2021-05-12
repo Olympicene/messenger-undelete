@@ -5,6 +5,7 @@ module.exports = class Kanye extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!Kanye";
+    this.description = " ";
     this.type = ["message", "message_reply"];
     this.needContent = false;
     this.message = {

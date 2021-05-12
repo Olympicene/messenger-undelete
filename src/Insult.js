@@ -5,6 +5,7 @@ module.exports = class Insult extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!Insult";
+    this.description = " ";
     this.type = ["message", "message_reply"];
     this.needContent = false;
     this.message = {

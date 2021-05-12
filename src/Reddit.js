@@ -7,6 +7,7 @@ module.exports = class Reddit extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!Reddit";
+    this.description = "[subreddit name]";
     this.type = ["message", "message_reply"];
     this.needContent = true;
     this.message = {

@@ -4,6 +4,7 @@ module.exports = class Uptime extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!Uptime";
+    this.description = " ";
     this.type = ["message", "message_reply"];
     this.needContent = false;
   }

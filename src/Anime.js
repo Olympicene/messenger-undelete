@@ -10,6 +10,7 @@ module.exports = class Anime extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!Anime";
+    this.description = "(must be a reply to media)"
     this.type = ["message_reply"];
     this.needContent = false;
   }

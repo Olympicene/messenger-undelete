@@ -7,6 +7,7 @@ module.exports = class Soyjack extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!Soyjack";
+    this.description = "(must be a reply to text)";
     this.type = ["message_reply"];
     this.needContent = false;
     this.message = {
