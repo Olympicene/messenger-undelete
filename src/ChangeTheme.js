@@ -1,29 +1,27 @@
-const Command = require('./Command.js');
-
+const Command = require("./Command.js");
 
 module.exports = class ChangeTheme extends Command {
+  constructor(ids) {
+    super(ids);
+    this.term = "!ChangeTheme";
+    this.type = ["message", "message_reply"];
+    this.needContent = true;
+    this.message = {
+      body: "",
+    };
+  }
 
-    constructor(ids) {
-        super(ids);
-        this.term = '!ChangeTheme';
-        this.type = ['message', 'message_reply'];
-        this.needContent = true;
-        this.message = {
-            body: '',
-        }
-    }
+  doAction(event, api) {
+    var key = super.getContent(event)[0];
+    if (key in api.threadColors) {
+      //check if key is valid
 
-    doAction(event, api) {
-        
-        var key = super.getContent(event)[0];
-        if(key in api.threadColors) { //check if key is valid
-                        
-            api.changeThreadColor(api.threadColors[key], event.threadID, (err) => { //change thread emoji
-                if(err) return console.error(err);
-            });
-            
-        } else {
-            throw "color key is invalid"
-        }
+      api.changeThreadColor(api.threadColors[key], event.threadID, (err) => {
+        //change thread emoji
+        if (err) return console.error(err);
+      });
+    } else {
+      throw "color key is invalid";
     }
-}
+  }
+};
