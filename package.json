@@ -38,6 +38,8 @@
     "request": "^2.88.2",
     "runes": "^0.4.3",
     "snoowrap": "^1.22.0",
+    "spotify-web-api-node": "^5.0.2",
+    "superagent": "^6.1.0",
     "tiktok-app-api": "^1.4.1",
     "tiktok-scraper": "^1.4.23"
   },

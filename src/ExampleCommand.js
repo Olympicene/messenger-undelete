@@ -1,5 +1,8 @@
 const Command = require("./Command.js");
+const SpotifyWebApi = require('spotify-web-api-node');
 const fetch = require("node-fetch");
+
+
 
 module.exports = class ExampleCommand extends Command {
   constructor(ids) {
@@ -14,6 +17,5 @@ module.exports = class ExampleCommand extends Command {
   }
 
   doAction(event, api) {
-    super.send(event, api, this.message);
   }
 };

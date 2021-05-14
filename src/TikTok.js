@@ -17,12 +17,9 @@ module.exports = class TikTok extends Command {
 
   async doAction(event, api) {
     const mediaDir = path.resolve(__dirname + "/../media/"); //directory the shibe file is going to
-    const url = mediaDir + "";
 
     await this.doCommand(
-      `tiktok-scraper hashtag ${
-        super.getContent(event)[0]
-      } -n 1 --filepath ${mediaDir} -t json -f tiktokdata`
+      `tiktok-scraper hashtag ${super.getContent(event)[0]} -n 1 --filepath ${mediaDir} -t json -f tiktokdata`
     );
 
     const tiktokdata = JSON.parse(
