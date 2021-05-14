@@ -7,7 +7,7 @@ module.exports = class Recommend extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!Recommend";
-    this.description = " ";
+    this.description = "[@someone]";
     this.type = ["message", "message_reply"];
     this.needContent = true;
     this.message = {
