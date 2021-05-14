@@ -1,10 +1,10 @@
 const Command = require("./Command.js");
 const fetch = require("node-fetch");
 
-module.exports = class Food extends Command {
+module.exports = class ExampleCommand extends Command {
   constructor(ids) {
     super(ids);
-    this.term = "!Food";
+    this.term = "!ExampleCommand";
     this.description = " ";
     this.type = ["message", "message_reply"];
     this.needContent = false;
