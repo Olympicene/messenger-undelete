@@ -58,25 +58,17 @@ login(
       "4258360417509656",
     ];
 
-    //dead code revisit later
-    //und = new Undelete(threadIDs);
-
     ////////////////////////////////////////////////////ListenLoop////////////////////////////////////////////////////
     api.listenMqtt((err, event) => {
       //DEBUG
       // if(err) return console.error(err);
       // console.log(event);
 
-      //dead code
-      //und.storeHistory(event, api, use);
-
       if (!use.inTimeout(event.threadID)) {
         for (var command in commandList) {
           new commandList[command](threadIDs).listen(event, api, use);
         }
 
-        //dead
-        //und.listen(event, api, use);
       }
     });
   }

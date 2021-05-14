@@ -24,7 +24,7 @@ module.exports = class Recommend extends Command {
     var credentials = JSON.parse(fs.readFileSync(databaseDir + "/credentials-reddit.json"));
 
     const spotifyApi = new SpotifyWebApi({
-      clientId: credentials.spotify.accessToken,
+      clientId: credentials.spotify.clientId,
       clientSecret: credentials.spotify.clientSecret
     });
 
@@ -46,7 +46,7 @@ module.exports = class Recommend extends Command {
     ////////////////////////////////////////////////////SPOTIFY_LOGIN////////////////////////////////////////////////////
 
     try {
-      var playlist = await spotifyApi.getPlaylist('2iIYdv8ppcU69aLa3RA1c6')
+      var playlist = await spotifyApi.getPlaylist('7mYoCHFxN5TdfA3sDksdYr')
 
       var song = playlist.body.tracks.items[Math.floor(Math.random() * playlist.body.tracks.items.length)].track //random song
 
@@ -66,12 +66,13 @@ module.exports = class Recommend extends Command {
         this.message.attachment = fs.createReadStream(mediaDir);
       } catch (err) {
         this.message.body = err
+        console.error(err)
       }
 
     } catch (err) {
       this.message.body = err
+      console.error(err)
     }
-
     super.send(event, api, this.message);
 
   }
