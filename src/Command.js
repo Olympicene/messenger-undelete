@@ -59,10 +59,7 @@ module.exports = class Commands {
 
   checkEvent(event) {
     //check if message type and term is valid
-    if (
-      this.type.indexOf(event.type) > -1 &&
-      this.threadIDs.includes(event.threadID)
-    ) {
+    if (this.type.indexOf(event.type) > -1 && this.threadIDs.includes(event.threadID)) {
       if (event.body.split(" ")[0].toUpperCase() == this.term.toUpperCase()) {
         return true;
       }
@@ -118,6 +115,13 @@ module.exports = class Commands {
         .on("end", resolve)
         .on("error", reject)
         .run();
+    });
+  }
+
+  getName(api, id, fn) {
+    api.getUserInfo(id, (err, ret) => {
+      if (err) return console.error(err);
+      fn((ret[id].name))
     });
   }
 };
