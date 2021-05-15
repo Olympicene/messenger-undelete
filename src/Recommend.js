@@ -30,7 +30,7 @@ module.exports = class Recommend extends Command {
 
     if (Date.now() - parseInt(credentials.spotify.time) > 2700000) {
       //about 45 minutes
-      spotifyApi
+      await spotifyApi
         .clientCredentialsGrant()
         .then((data) => {
           credentials.spotify.accessToken = data.body["access_token"];
@@ -46,7 +46,7 @@ module.exports = class Recommend extends Command {
         });
     }
 
-    spotifyApi.setAccessToken(credentials.spotify.accessToken);
+    await spotifyApi.setAccessToken(credentials.spotify.accessToken);
 
     ////////////////////////////////////////////////////SPOTIFY_LOGIN////////////////////////////////////////////////////
 
