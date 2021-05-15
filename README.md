@@ -1,4 +1,4 @@
 # messenger-helper
 
-messenger helper is a messenger chat bot with functionality mainly created for a certain groupchat
-also for me to learn
+this is is a  chat bot with functionality created for messing around in a personal messenger groupchat.
+I used this repo to learn the basics of nodejs.
