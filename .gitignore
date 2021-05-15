@@ -3,3 +3,4 @@ node_modules/
 /database/appstate.json
 media/*
 /database/playlists.json
+/database/Output.json
