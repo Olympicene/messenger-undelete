@@ -52,40 +52,49 @@ module.exports = class Recommend extends Command {
 
     var database = JSON.parse(fs.readFileSync(databaseDir + "/playlists.json"));
 
-    try {
-      var playlistID = Object.keys(event.mentions)[0];
+    if(Object.keys(event.mentions).length > 0) {
 
       try {
-        var playlist = await spotifyApi.getPlaylist(database[playlistID]);
-
-        var song =
-          playlist.body.tracks.items[
-            Math.floor(Math.random() * playlist.body.tracks.items.length)
-          ].track; //random song
-
-        var artists = []; //parse artists
-        for (var artist in song.artists) {
-          artists.push(song.artists[artist].name);
+        var playlistID = database[Object.keys(event.mentions)[0]];
+        
+        if (playlistID == undefined) {
+          throw "error id not found"
         }
 
-        this.message.body = `${song.name} - ${artists.join(", ")}`;
-
-        const mediaDir = path.resolve(__dirname + "/../media/" + `rec.mp3`); //directory the mp3 file is going to
-        var url = song.preview_url;
-
         try {
-          await super.downloadFile(url, mediaDir);
-          this.message.attachment = fs.createReadStream(mediaDir);
+          var playlist = await spotifyApi.getPlaylist(playlistID);
+  
+          var song =
+            playlist.body.tracks.items[
+              Math.floor(Math.random() * playlist.body.tracks.items.length)
+            ].track; //random song
+  
+          var artists = []; //parse artists
+          for (var artist in song.artists) {
+            artists.push(song.artists[artist].name);
+          }
+  
+          this.message.body = `${song.name} - ${artists.join(", ")}`;
+  
+          const mediaDir = path.resolve(__dirname + "/../media/" + `rec.mp3`); //directory the mp3 file is going to
+          var url = song.preview_url;
+  
+          try {
+            await super.downloadFile(url, mediaDir);
+            this.message.attachment = fs.createReadStream(mediaDir);
+          } catch (err) {
+            this.message.body = err;
+            console.error(err);
+          }
         } catch (err) {
           this.message.body = err;
           console.error(err);
         }
       } catch (err) {
-        this.message.body = err;
-        console.error(err);
+        this.message.body = "This person does not have a playlist yet. Add one with \"!myplaylist\".";
       }
-    } catch (err) {
-      this.message.body = "you must include a mention in your command";
+    } else {
+      this.message = "You must include a mention in your command."
     }
 
     super.send(event, api, this.message);
