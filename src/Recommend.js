@@ -83,8 +83,7 @@ module.exports = class Recommend extends Command {
             await super.downloadFile(url, mediaDir);
             this.message.attachment = fs.createReadStream(mediaDir);
           } catch (err) {
-            this.message.body = err;
-            console.error(err);
+            this.message.body += "\n sorry, no preview audio track.";
           }
         } catch (err) {
           this.message.body = err;
