@@ -4,3 +4,5 @@ node_modules/
 media/*
 /database/playlists.json
 /database/Output.json
+/database/Output.txt
+/database/gpt_new.txt
