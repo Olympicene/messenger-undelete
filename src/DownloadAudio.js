@@ -17,9 +17,9 @@ module.exports = class DownloadAudio extends Command {
   }
 
   doAction(event, api) {
-    if (event.messageReply.attachments[0].type == 'audio') {
-
-      this.message.body = event.messageReply.attachments[0].url
+    
+    if (event.messageReply.attachments.type == 'audio') {
+      this.message.body = event.messageReply.attachments.url
     } else {
       this.message.body = 'that is not an audio file'
     }
