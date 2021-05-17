@@ -6,3 +6,4 @@ media/*
 /database/Output.json
 /database/Output.txt
 /database/gpt_new.txt
+/database/gpt.json

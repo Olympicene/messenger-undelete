@@ -1,6 +1,7 @@
 const Command = require("./Command.js");
 var path = require("path");
 const fs = require("fs");
+const { env } = require("process");
 
 
 module.exports = class Gpt extends Command {
@@ -15,29 +16,19 @@ module.exports = class Gpt extends Command {
     };
   }
 
-  getRandomLine(filename, callback){
-    fs.readFile(filename, function(err, data){
-      if(err) {
-          throw err;
-      }
-
-      var lines = data.toString().split('\n');
-      
-      var line = lines[Math.floor(Math.random()*lines.length)]
-  
-      callback(line);
-   })
-  }
-
   doAction(event, api) {
     const databaseDir = path.resolve(__dirname + "/../database/");
+    var messages = JSON.parse(fs.readFileSync(databaseDir + "/gpt.json"));
 
-    this.getRandomLine(databaseDir + "/gpt_new.txt", (line) => {
-      
-      this.message.body = line
+    var index = Math.floor(Math.random() * messages.length)
 
-      super.send(event, api, this.message)
-    });
+    this.message = messages[index]
+
+    messages.splice(index, 1)
+
+    super.send(event, api, this.message)
+
+    fs.writeFileSync(databaseDir + "/gpt.json", JSON.stringify(messages, null, "\t"));
   }
 
 
