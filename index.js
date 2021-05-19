@@ -41,7 +41,7 @@ login(
     ////////////////////////////////////////////////////Setoptions////////////////////////////////////////////////////
     api.setOptions({
       listenEvents: true,
-      selfListen: true,
+      //selfListen: true,
       forceLogin: true,
     });
 

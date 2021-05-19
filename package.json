@@ -18,6 +18,8 @@
   "homepage": "https://github.com/Olympicene/messenger-meme#readme",
   "dependencies": {
     "canvas": "^2.6.1",
+    "compromise": "^13.11.2",
+    "compromise-sentences": "^0.3.0",
     "facebook-chat-api": "^1.8.0",
     "filesize": "^6.3.0",
     "fluent-ffmpeg": "^2.1.2",

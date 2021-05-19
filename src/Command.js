@@ -32,6 +32,7 @@ module.exports = class Commands {
     if (this.checkEvent(event)) {
       if (this.needContent == this.isContent(event)) {
         try {
+          
           this.doAction(event, api);
           use.threadTimeout(event.threadID);
         } catch (e) {
