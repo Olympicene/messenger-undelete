@@ -22,29 +22,38 @@ module.exports = class TikTok extends Command {
       `tiktok-scraper hashtag ${super.getContent(event)[0]} -n 1 --filepath ${mediaDir} -t json -f tiktokdata`
     );
 
-    const tiktokdata = JSON.parse(
-      fs.readFileSync(mediaDir + "/tiktokdata.json", "utf8")
-    ); //gets credentials
+    ////////////////////////////////////////////TRY_TO_GET////////////////////////////////////////////
 
-    //console.log(tiktokdata[0].videoUrl)
+    try {
+      const tiktokdata = JSON.parse(
+        fs.readFileSync(mediaDir + "/tiktokdata.json", "utf8")
+      );
 
-    await this.doCommand(
-      `tiktok-scraper video ${tiktokdata[0].webVideoUrl} -d tiktok --filepath ${mediaDir}`
-    );
+      await this.doCommand(
+        `tiktok-scraper video ${tiktokdata[0].webVideoUrl} -d tiktok --filepath ${mediaDir}`
+      );
 
-    this.message.attachment = fs.createReadStream(
-      mediaDir + `/${tiktokdata[0].id}.mp4`
-    );
+      this.message.attachment = fs.createReadStream(
+        mediaDir + `/${tiktokdata[0].id}.mp4`
+      );
 
-    super.send(event, api, this.message).then(() => {
-      try {
-        fs.unlinkSync(mediaDir + `/${tiktokdata[0].id}.mp4`);
+      super.send(event, api, this.message).then(() => {
+        try {
+          fs.unlinkSync(mediaDir + `/${tiktokdata[0].id}.mp4`);
+          fs.unlinkSync(mediaDir + `/tiktokdata.json`);
+  
+          console.log("Files are deleted.");
+        } catch (error) {
+        }
+      });
 
-        console.log("File is deleted.");
-      } catch (error) {
-        console.log(error);
-      }
-    });
+    } catch (err) {
+      this.message.body = "This tiktok hashtag does not exist."
+      super.send(event, api, this.message);
+    }
+
+    ////////////////////////////////////////////SEND_STUFF////////////////////////////////////////////
+
   }
 
   async doCommand(cmd) {
