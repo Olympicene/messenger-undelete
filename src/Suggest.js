@@ -3,10 +3,10 @@ const SpotifyWebApi = require("spotify-web-api-node");
 var path = require("path");
 const fs = require("fs");
 
-module.exports = class Recommend extends Command {
+module.exports = class Suggest extends Command {
   constructor(ids) {
     super(ids);
-    this.term = "!Recommend";
+    this.term = "!Suggest";
     this.description = "[@someone]";
     this.type = ["message", "message_reply"];
     this.needContent = true;
