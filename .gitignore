@@ -7,3 +7,5 @@ media/*
 /database/gpt.json
 /database/Output.txt
 /database/gpt_new.txt
+/database/reactions.json
+
