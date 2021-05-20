@@ -62,7 +62,7 @@ login(
     api.listenMqtt((err, event) => {
       //DEBUG
       // if(err) return console.error(err);
-      //console.log(event);
+      console.log(event);
 
       if (!use.inTimeout(event.threadID)) {
         for (var command in commandList) {

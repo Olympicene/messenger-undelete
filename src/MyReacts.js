@@ -6,7 +6,7 @@ module.exports = class MyReacts extends Command {
   constructor(ids) {
     super(ids);
     this.term = "!MyReacts";
-    this.description = " ";
+    this.description = "[emoji]";
     this.type = ["message", "message_reply"];
     this.needContent = true;
     this.message = {
