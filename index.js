@@ -1,19 +1,14 @@
 const fs = require("fs");
 const path = require("path");
+const config = require("./database/config");
 const glob = require("glob");
 const login = require("facebook-chat-api");
 const Timeout = require("./src/Timeout");
 
+
 ////////////////////////////////////////////////////ImportCommands////////////////////////////////////////////////////
 var commandList = [];
-var ignoredList = [
-  "Command",
-  "Timeout",
-  "Undelete",
-  "ExampleCommand",
-  "Shutdown",
-  "Meme",
-];
+var ignoredList = config.ignored_commands;
 
 glob.sync("./src/*.js").forEach((file) => {
   if (
@@ -23,6 +18,7 @@ glob.sync("./src/*.js").forEach((file) => {
   }
 });
 
+//print out all active commands
 console.log(commandList);
 
 ////////////////////////////////////////////////////LoginWithCookies////////////////////////////////////////////////////
@@ -39,31 +35,26 @@ login(
     ); //store cookies
 
     ////////////////////////////////////////////////////Setoptions////////////////////////////////////////////////////
-    api.setOptions({
-      listenEvents: true,
-      //selfListen: true,
-      forceLogin: true,
-    });
+    
+    api.setOptions(config.apiOptions);
 
     ////////////////////////////////////////////////////ChangeVars////////////////////////////////////////////////////
 
-    //start timeout timer
-    const use = new Timeout(10000); //30000 used to be
+    //init timeout timer
+    const use = new Timeout(config.timeout_milliseconds); //30000 used to be
 
     // add the threadID of chats you want enabled
-    threadIDs = [
-      "2401681243197992",
-      "4432056806822983",
-      "4341136652627262",
-      "4258360417509656",
-    ];
+    threadIDs = config.allowed_threads
 
     ////////////////////////////////////////////////////ListenLoop////////////////////////////////////////////////////
     api.listenMqtt((err, event) => {
-      //DEBUG
-      // if(err) return console.error(err);
-      console.log(event);
+      if(err) return console.error(err);
 
+      
+      //DEBUG
+      if(config.DEBUG) {console.log(event)}
+
+      //commands
       if (!use.inTimeout(event.threadID)) {
         for (var command in commandList) {
           new commandList[command](threadIDs).listen(event, api, use);
