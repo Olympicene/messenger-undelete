@@ -1,5 +1,4 @@
 const Command = require("./Command.js");
-const SpotifyWebApi = require('spotify-web-api-node');
 var path = require("path");
 const fs = require("fs");
 var url = require("url");
