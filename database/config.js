@@ -22,4 +22,4 @@ exports.apiOptions = {
   forceLogin: true,
 }
 
-exports.DEBUG = false;
+exports.DEBUG = true;

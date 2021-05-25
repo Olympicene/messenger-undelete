@@ -3,23 +3,23 @@ const path = require("path");
 const config = require("./database/config");
 const glob = require("glob");
 const login = require("facebook-chat-api");
-const Timeout = require("./src/Timeout");
+//const Timeout = require("./src/Timeout");
 
 
 ////////////////////////////////////////////////////ImportCommands////////////////////////////////////////////////////
-var commandList = [];
-var ignoredList = config.ignored_commands;
+  // var commandList = [];
+  // var ignoredList = config.ignored_commands;
 
-glob.sync("./src/*.js").forEach((file) => {
-  if (
-    !ignoredList.map((command) => "./src/" + command + ".js").includes(file)
-  ) {
-    commandList.push(require(file));
-  }
-});
+  // glob.sync("./src/*.js").forEach((file) => {
+  //   if (
+  //     !ignoredList.map((command) => "./src/" + command + ".js").includes(file)
+  //   ) {
+  //     commandList.push(require(file));
+  //   }
+  // });
 
-//print out all active commands
-console.log(commandList);
+  //print out all active commands
+  //console.log(commandList);
 
 ////////////////////////////////////////////////////LoginWithCookies////////////////////////////////////////////////////
 const databaseDir = path.resolve(__dirname + "/database/");
@@ -41,7 +41,7 @@ login(
     ////////////////////////////////////////////////////ChangeVars////////////////////////////////////////////////////
 
     //init timeout timer
-    const use = new Timeout(config.timeout_milliseconds); //30000 used to be
+    //const use = new Timeout(config.timeout_milliseconds); //30000 used to be
 
     // add the threadID of chats you want enabled
     threadIDs = config.allowed_threads
@@ -55,12 +55,11 @@ login(
       if(config.DEBUG) {console.log(event)}
 
       //commands
-      if (!use.inTimeout(event.threadID)) {
-        for (var command in commandList) {
-          new commandList[command](threadIDs).listen(event, api, use);
-        }
-
-      }
+      // if (!use.inTimeout(event.threadID)) {
+      //   for (var command in commandList) {
+      //     new commandList[command](threadIDs).listen(event, api, use);
+      //   }
+      // }
     });
   }
 );
