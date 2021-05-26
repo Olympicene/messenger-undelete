@@ -1,5 +1,7 @@
 const Command = require("./Command.js");
 const glob = require("glob");
+const config = require("./database/config");
+
 
 module.exports = class CommandList extends Command {
   constructor(ids) {
@@ -15,14 +17,7 @@ module.exports = class CommandList extends Command {
 
   doAction(event, api) {
     var commandList = [];
-    var ignoredList = [
-      "Command",
-      "Timeout",
-      "Undelete",
-      "ExampleCommand",
-      "Shutdown",
-      "Meme",
-    ];
+    var ignoredList = config.ignored_commands;
     
     glob.sync("./src/*.js").forEach((file) => {
       if (
