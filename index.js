@@ -32,18 +32,7 @@ login(
 
       //commands
 
-      console.time('doSomething')
-
-      if (!use.inTimeout(event.threadID)) {
-        for (var command in commandList) {
-          new commandList[command](threadIDs).listen(event, api, use);
-        }
-
-      }
-
-      console.timeEnd('doSomething')
-
-
+      eventListener.receive(event, api);
 
     });
   }
