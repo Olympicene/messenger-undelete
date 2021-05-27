@@ -33,8 +33,4 @@ module.exports = class Eightball extends Command {
       super.send(event, api, this.message);
     }
   }
-
-  kill() {
-    console.log('penis poggers')
-  }
 };

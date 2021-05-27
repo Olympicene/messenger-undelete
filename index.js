@@ -33,7 +33,12 @@ login(
       }
 
       //Delegate events in seperate class
+      console.time('doSomething')
+
       eventListener.receive(event, api);
+      
+      console.timeEnd('doSomething')
+
     });
   }
 );

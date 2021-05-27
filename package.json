@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Olympicene/messenger-meme#readme",
   "dependencies": {
+    "app-root-path": "^3.0.0",
     "canvas": "^2.6.1",
     "compromise": "^13.11.2",
     "compromise-sentences": "^0.3.0",
