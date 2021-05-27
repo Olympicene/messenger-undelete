@@ -1,4 +1,6 @@
-exports.timeout_milliseconds = 1000;
+exports.timeout_milliseconds = 10000;
+
+exports.prefix = "!";
 
 exports.allowed_threads = [
   "2401681243197992",
@@ -16,10 +18,14 @@ exports.ignored_commands = [
   "Meme",
 ];
 
+exports.ignored_listeners = [
+  "TEMPORARY_DELETE_LATER",
+];
+
 exports.apiOptions = {
   listenEvents: true,
   selfListen: false,
   forceLogin: true,
-}
+};
 
 exports.DEBUG = false;

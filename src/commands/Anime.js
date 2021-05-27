@@ -1,10 +1,10 @@
 const Command = require("./Command.js");
-const runes = require("runes");
 const fetch = require("node-fetch");
 const fs = require("fs");
 const request = require("request");
-const FormData = require("form-data");
 const imageToBase64 = require("image-to-base64");
+const appRoot = require('app-root-path');
+const { env } = require("process");
 
 module.exports = class Anime extends Command {
   constructor(ids) {
@@ -27,12 +27,12 @@ module.exports = class Anime extends Command {
         });
       };
 
-      const path = "./src/image.png";
+      const path = appRoot + "/media/anime.png";
 
       download(url, path, () => {
         console.log("✅ Done!");
 
-        imageToBase64("./src/image.png") // Path to the image
+        imageToBase64(path) // Path to the image
           .then((response) => {
             //console.log(response); // "cGF0aC90by9maWxlLmpwZw=="
 

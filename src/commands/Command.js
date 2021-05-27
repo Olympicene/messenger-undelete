@@ -60,7 +60,7 @@ module.exports = class Commands {
 
   checkEvent(event) {
     //check if message type and term is valid
-    if (this.type.indexOf(event.type) > -1 && this.threadIDs.includes(event.threadID)) {
+    if (this.type.indexOf(event.type) > -1) {
       if (event.body.split(" ")[0].toUpperCase() == this.term.toUpperCase()) {
         return true;
       }

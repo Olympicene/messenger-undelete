@@ -1,11 +1,13 @@
 const Command = require("./Command.js");
 const fs = require("fs");
 const path = require("path");
+var appRoot = require('app-root-path');
 
-module.exports = class Dylan extends Command {
+
+module.exports = class TheUrge extends Command {
   constructor(ids) {
     super(ids);
-    this.term = "!Dylan";
+    this.term = "!TheUrge";
     this.description = " ";
     this.type = ["message", "message_reply"];
     this.needContent = false;
@@ -15,9 +17,9 @@ module.exports = class Dylan extends Command {
   }
 
   doAction(event, api) {
-    const mediaDir = path.resolve(__dirname + "/../media/" + `dylan.png`); //directory the shibe file is going to
+    const mediaDir = path.resolve(appRoot + "/media/urge.png"); //directory the  file is going to
     var url =
-      "https://i.kym-cdn.com/photos/images/original/001/924/672/fc3.jpg";
+      "https://i.ibb.co/QdZ8BDb/165670278-1353254831738443-1968237180024515079-n.jpg";
 
     if (fs.existsSync(mediaDir)) {
       this.send(event, api, mediaDir);

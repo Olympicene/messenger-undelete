@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Olympicene/messenger-meme#readme",
   "dependencies": {
+    "app-root-path": "^3.0.0",
     "canvas": "^2.6.1",
     "compromise": "^13.11.2",
     "compromise-sentences": "^0.3.0",
@@ -40,6 +41,7 @@
     "path": "^0.12.7",
     "request": "^2.88.2",
     "runes": "^0.4.3",
+    "sexy-require": "^1.1.2",
     "snoowrap": "^1.22.0",
     "spotify-web-api-node": "^5.0.2",
     "superagent": "^6.1.0",
