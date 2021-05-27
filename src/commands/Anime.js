@@ -62,7 +62,11 @@ module.exports = class Anime extends Command {
                   result.docs[0].similarity * 100 +
                   "%";
 
-                super.send(event, api, this.message);
+                api.sendMessage(this.message, event.threadID, (err) => {
+                  //change send thread stuff
+                  if (err) return console.error(err);
+
+                });
               });
           })
           .catch((error) => {

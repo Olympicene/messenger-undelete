@@ -28,12 +28,23 @@ login(
       if (err) return console.error(err);
 
       //DEBUG
-      if (config.DEBUG) {
-        console.log(event);
+      if(config.DEBUG) {console.log(event)}
+
+      //commands
+
+      console.time('doSomething')
+
+      if (!use.inTimeout(event.threadID)) {
+        for (var command in commandList) {
+          new commandList[command](threadIDs).listen(event, api, use);
+        }
+
       }
 
-      //Delegate events in seperate class
-      eventListener.receive(event, api);
+      console.timeEnd('doSomething')
+
+
+
     });
   }
 );
