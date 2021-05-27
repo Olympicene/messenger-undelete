@@ -19,7 +19,6 @@ module.exports = class CommandList extends Command {
   doAction(event, api) {
     let commandList = [];
     let ignoredcommands = config.ignored_commands.map((command) => command + ".js");
-
     
     fs.readdirSync(__dirname).forEach((file) => {
       if (!ignoredcommands.includes(file)) {
@@ -31,6 +30,8 @@ module.exports = class CommandList extends Command {
       var com = new commandList[command]()
       commandList[command] = com.term + ' ' + com.description + '\n'
     }
+
+    this.message.body = ""; 
 
     for (var command in commandList) {
       this.message.body += commandList[command];
