@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const fs = require("fs");
 const request = require("request");
 const imageToBase64 = require("image-to-base64");
-var appRoot = require('app-root-path');
+const appRoot = require('app-root-path');
 const { env } = require("process");
 
 module.exports = class Anime extends Command {

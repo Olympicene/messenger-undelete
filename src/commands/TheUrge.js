@@ -1,6 +1,8 @@
 const Command = require("./Command.js");
 const fs = require("fs");
 const path = require("path");
+var appRoot = require('app-root-path');
+
 
 module.exports = class TheUrge extends Command {
   constructor(ids) {
@@ -15,7 +17,7 @@ module.exports = class TheUrge extends Command {
   }
 
   doAction(event, api) {
-    const mediaDir = path.resolve(__dirname + "/../media/" + `urge.png`); //directory the shibe file is going to
+    const mediaDir = path.resolve(appRoot + "/media/urge.png"); //directory the  file is going to
     var url =
       "https://i.ibb.co/QdZ8BDb/165670278-1353254831738443-1968237180024515079-n.jpg";
 

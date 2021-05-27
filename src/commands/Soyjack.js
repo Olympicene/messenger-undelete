@@ -2,6 +2,8 @@ const Command = require("./Command.js");
 const fs = require("fs");
 const fetch = require("node-fetch");
 const path = require("path");
+var appRoot = require('app-root-path');
+
 
 module.exports = class Soyjack extends Command {
   constructor(ids) {
@@ -21,8 +23,8 @@ module.exports = class Soyjack extends Command {
       .split(" ")
       .join("_")
       .replace(/\/{2,}/g, "/"); //clean split spaces into _ remove all other /
-    const mediaDir = path.resolve(__dirname + "/../media/" + `soy.png`); //directory the soyjack file is going to
-    var url =
+      const mediaDir = path.resolve(appRoot + "/media/soy.png"); //directory the  file is going to
+      var url =
       "https://api.memegen.link/images/custom/_" +
       text +
       ".png?background=https://www.dictionary.com/e/wp-content/uploads/2018/05/soyboy-2.png";

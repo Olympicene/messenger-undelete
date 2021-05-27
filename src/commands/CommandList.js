@@ -1,6 +1,8 @@
 const Command = require("./Command.js");
-const glob = require("glob");
 const config = require(__dirname + "/../../database/config.js");
+const appRoot = require("app-root-path");
+const fs = require("fs");
+
 
 
 module.exports = class CommandList extends Command {
@@ -16,29 +18,20 @@ module.exports = class CommandList extends Command {
   }
 
   doAction(event, api) {
-    var commandList = [];
-    var ignoredList = config.ignored_commands;
+    let commandList = [];
+    let ignoredcommands = config.ignored_commands.map((command) => command + ".js");
+
     
-    glob.sync("./src/*.js").forEach((file) => {
-      if (
-        !ignoredList.map((command) => "./src/" + command + ".js").includes(file)
-      ) {
-        commandList.push(require("./" + file.slice(6, -3) + ".js"));
+    fs.readdirSync(__dirname).forEach((file) => {
+      if (!ignoredcommands.includes(file)) {
+        commandList.push(require("./" + file));
       }
     });
 
     for (var command in commandList) {
-      var com = new commandList[command](threadIDs)
+      var com = new commandList[command]()
       commandList[command] = com.term + ' ' + com.description + '\n'
     }
- 
-    // glob.sync("./src/*.js").forEach(function (file) {
-    //   if (!ignoredList.map((command) => "./src/" + command + ".js").includes(file)) {
-    //     commandList.push(file.slice(6, -3));
-    //   }
-    // });
-
-    // commandList = commandList.map((command) => "!" + command + "\n");
 
     for (var command in commandList) {
       this.message.body += commandList[command];

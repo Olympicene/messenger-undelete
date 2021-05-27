@@ -26,13 +26,15 @@ let ignoredlisteners = config.ignored_listeners.map((command) => command + ".js"
 
 fs.readdirSync(__dirname + "/listeners").forEach((file) => {
   if (!ignoredlisteners.includes(file)) {
+    let term = file.slice(0, -3).toLowerCase();
+
     let listener = require("./listeners/" + file);
 
-    listenerList.push(new listener());
+    listenerList[term] = new listener();
   }
 });
 
-console.log(listenerList);
+console.log(Object.keys(listenerList));
 
 ////////////////////////////////////////////////////Timeout////////////////////////////////////////////////////
 

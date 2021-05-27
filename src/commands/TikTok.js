@@ -2,6 +2,8 @@ const Command = require("./Command.js");
 var path = require("path");
 const { exec } = require("child_process");
 const fs = require("fs");
+var appRoot = require('app-root-path');
+
 
 module.exports = class TikTok extends Command {
   constructor(ids) {
@@ -16,7 +18,7 @@ module.exports = class TikTok extends Command {
   }
 
   async doAction(event, api) {
-    const mediaDir = path.resolve(__dirname + "/../media/"); //directory the shibe file is going to
+    const mediaDir = path.resolve(appRoot + "/media/"); //directory the shibe file is going to
 
     ////////////////////////////////////////////TRY_TO_GET////////////////////////////////////////////
 

@@ -1,7 +1,7 @@
 module.exports = class Listener {
     constructor() {}
   
-    listen(event) {
-        console.log(event.type)
+    async listen(event) {
+        //console.log(event.type)
     }
 }

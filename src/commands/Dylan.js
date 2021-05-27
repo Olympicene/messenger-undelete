@@ -1,6 +1,8 @@
 const Command = require("./Command.js");
 const fs = require("fs");
 const path = require("path");
+const appRoot = require("app-root-path");
+
 
 module.exports = class Dylan extends Command {
   constructor(ids) {
@@ -15,7 +17,7 @@ module.exports = class Dylan extends Command {
   }
 
   doAction(event, api) {
-    const mediaDir = path.resolve(__dirname + "/../media/" + `dylan.png`); //directory the shibe file is going to
+    const mediaDir = path.resolve(appRoot + "/media/dylan.png"); //directory the  file is going to
     var url =
       "https://i.kym-cdn.com/photos/images/original/001/924/672/fc3.jpg";
 
