@@ -65,6 +65,7 @@ module.exports = class Anime extends Command {
                 api.sendMessage(this.message, event.threadID, (err) => {
                   //change send thread stuff
                   if (err) return console.error(err);
+
                 });
               });
           })

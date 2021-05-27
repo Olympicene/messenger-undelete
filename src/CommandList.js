@@ -1,6 +1,6 @@
 const Command = require("./Command.js");
 const glob = require("glob");
-const config = require("./database/config");
+const config = require("../database/config");
 
 
 module.exports = class CommandList extends Command {
