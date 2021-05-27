@@ -11,7 +11,6 @@ exports.allowed_threads = [
 
 exports.ignored_commands = [
   "Command",
-  "Timeout",
   "Undelete",
   "ExampleCommand",
   "Shutdown",

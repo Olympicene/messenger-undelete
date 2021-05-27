@@ -1,6 +1,7 @@
-const config = require(__dirname + "/../database/config.js");
+const appRoot = require("app-root-path");
+const config = require(appRoot + "/database/config.js");
 const fs = require("fs");
-const Timeout = require("./commands/Timeout");
+const Timeout = require("./Timeout");
 
 ////////////////////////////////////////////////////GetCommands////////////////////////////////////////////////////
 

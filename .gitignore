@@ -2,10 +2,6 @@ node_modules/
 /database/credentials-reddit.json
 /database/appstate.json
 media/*
-/database/playlists.json
-/database/Output.json
-/database/gpt.json
-/database/Output.txt
-/database/gpt_new.txt
-/database/reactions.json
+/database/*.json
+
 
