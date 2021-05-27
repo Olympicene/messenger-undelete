@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const config = require("./database/config");
+const config = require("./database/config.js");
 const login = require("facebook-chat-api");
 const Listener = require("./src/EventListener.js");
 
@@ -11,6 +11,7 @@ login(
   { appState: JSON.parse(fs.readFileSync("database/appstate.json", "utf8")) },
   (err, api) => {
     if (err) return console.error(err);
+
 
     fs.writeFileSync(
       databaseDir + "/appstate.json",
@@ -32,7 +33,7 @@ login(
       }
 
       //Delegate events in seperate class
-      eventListener.receive(event);
+      eventListener.receive(event, api);
     });
   }
 );

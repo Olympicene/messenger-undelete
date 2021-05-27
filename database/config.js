@@ -1,4 +1,6 @@
-exports.timeout_milliseconds = 1000;
+exports.timeout_milliseconds = 10000;
+
+exports.prefix = '!';
 
 exports.allowed_threads = [
   "2401681243197992",
@@ -22,4 +24,4 @@ exports.apiOptions = {
   forceLogin: true,
 }
 
-exports.DEBUG = true;
+exports.DEBUG = false;
