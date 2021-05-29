@@ -41,7 +41,7 @@ module.exports = class Listener {
           var stuff = JSON.parse(thing);
           stuff.unshift(result);
 
-          if (stuff.length > 100) {
+          if (stuff.length > config.deleted_length) {
             stuff.pop();
           }
 

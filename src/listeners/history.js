@@ -32,7 +32,7 @@ module.exports = class Listener {
         var json = JSON.parse(data);
         json.unshift(event);
 
-        if (json.length > 100) {
+        if (json.length > config.history_length) {
           json.pop();
         }
 

@@ -2,6 +2,10 @@ exports.timeout_milliseconds = 1000;
 
 exports.prefix = "!";
 
+exports.history_length = 2000;
+
+exports.deleted_length = 1000;
+
 exports.allowed_threads = [
   "2401681243197992",
   "4432056806822983",
@@ -20,7 +24,7 @@ exports.ignored_listeners = [
 
 exports.apiOptions = {
   listenEvents: true,
-  selfListen: false,
+  selfListen: true,
   forceLogin: true,
 };
 
