@@ -11,10 +11,7 @@ exports.allowed_threads = [
 
 exports.ignored_commands = [
   "Command",
-  "Undelete",
   "ExampleCommand",
-  "Shutdown",
-  "Meme",
 ];
 
 exports.ignored_listeners = [

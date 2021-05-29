@@ -62,7 +62,11 @@ module.exports = class Listener {
 
         //get command from term
         if (term.charAt(0) === config.prefix) {
-          commandList[term].listen(event, api, use)
+          try {
+            commandList[term].listen(event, api, use)
+          } catch (err) {
+            console.log(`invalid command: ${term}`)
+          }
         }
       }
     }
