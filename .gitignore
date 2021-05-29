@@ -3,5 +3,5 @@ node_modules/
 /database/appstate.json
 media/*
 /database/*.json
-
+.vscode
 
