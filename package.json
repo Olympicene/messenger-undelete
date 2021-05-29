@@ -31,6 +31,7 @@
     "http": "^0.0.1-security",
     "https": "^1.0.0",
     "image-to-base64": "^2.2.0",
+    "lodash": "^4.17.21",
     "markov-generator": "^1.2.3",
     "meme-maker": "^2.1.2",
     "minimist": "^1.2.5",

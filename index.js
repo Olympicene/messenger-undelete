@@ -31,7 +31,6 @@ login(
       if(config.DEBUG) {console.log(event)}
 
       //commands
-
         eventListener.receive(event, api);
     });
   }

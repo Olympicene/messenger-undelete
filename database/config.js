@@ -1,4 +1,4 @@
-exports.timeout_milliseconds = 10000;
+exports.timeout_milliseconds = 1000;
 
 exports.prefix = "!";
 

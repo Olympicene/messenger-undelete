@@ -1,5 +1,5 @@
 const appRoot = require("app-root-path");
-const Command = require("./Command.js");
+const Command = require(appRoot + "/src/Command.js");
 const config = require(appRoot + "/database/config.js");
 const fs = require("fs");
 
