@@ -35,6 +35,8 @@ module.exports = class Listener {
           return msg.messageID === event.messageID;
         });
 
+        result = result[0]
+
         fs.readFile(databaseDir("deleted", event.threadID), (err, thing) => {
           var stuff = JSON.parse(thing);
           stuff.unshift(result);
