@@ -33,6 +33,7 @@
     "image-to-base64": "^2.2.0",
     "markov-generator": "^1.2.3",
     "meme-maker": "^2.1.2",
+    "minimist": "^1.2.5",
     "mongodb": "^3.6.4",
     "node": "^14.14.0",
     "node-fetch": "^2.6.1",

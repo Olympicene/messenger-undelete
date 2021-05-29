@@ -6,18 +6,16 @@ const fs = require("fs");
 
 
 module.exports = class CommandList extends Command {
-  constructor(ids) {
-    super(ids);
-    this.term = "!CommandList";
-    this.description = " ";
+  constructor() {
+    super()
+    this.description = "displays list of commands";
     this.type = ["message", "message_reply"];
-    this.needContent = false;
-    this.message = {
-      body: "",
-    };
+    this.message = {}
   }
 
   doAction(event, api) {
+    //honest to god no idea why this works
+
     let commandList = [];
     let ignoredcommands = config.ignored_commands.map((command) => command + ".js");
     
@@ -29,7 +27,7 @@ module.exports = class CommandList extends Command {
 
     for (var command in commandList) {
       var com = new commandList[command]()
-      commandList[command] = com.term + ' ' + com.description + '\n'
+      commandList[command] = config.prefix + com.constructor.name + ' ' + com.description + '\n'
     }
 
     this.message.body = ""; 
