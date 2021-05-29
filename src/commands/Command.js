@@ -16,23 +16,10 @@ module.exports = class Commands {
     this.threadIDs = ids;
   }
 
-  secondsToHms(d) {
-    d = Number(d);
-    var h = Math.floor(d / 3600);
-    var m = Math.floor((d % 3600) / 60);
-    var s = Math.floor((d % 3600) % 60);
-
-    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-    return hDisplay + mDisplay + sDisplay;
-  }
-
   listen(event, api, use) {
-    if (this.checkEvent(event)) {
+    if (this.typeIsCorrect(event)) {
       if (this.needContent == this.isContent(event)) {
         try {
-          
           this.doAction(event, api);
           use.threadTimeout(event.threadID);
         } catch (e) {
@@ -58,12 +45,10 @@ module.exports = class Commands {
     throw "Abstract method not implemented";
   }
 
-  checkEvent(event) {
+  typeIsCorrect(event) {
     //check if message type and term is valid
     if (this.type.indexOf(event.type) > -1) {
-      if (event.body.split(" ")[0].toUpperCase() == this.term.toUpperCase()) {
         return true;
-      }
     }
     return false;
   }
@@ -124,5 +109,17 @@ module.exports = class Commands {
       if (err) return console.error(err);
       fn((ret[id].name))
     });
+  }
+
+  secondsToHms(d) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor((d % 3600) / 60);
+    var s = Math.floor((d % 3600) % 60);
+
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+    return hDisplay + mDisplay + sDisplay;
   }
 };
