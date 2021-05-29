@@ -27,9 +27,15 @@ module.exports = class Undelete extends Command {
 
         var json = JSON.parse(data);
 
+        var attachments = '';
+
+        for (var image in json[0].attachments) {
+            attachments += json[0].attachments[image].type + ' ' + (parseInt(image)+1) + ': \n' + json[0].attachments[image].url + '\n\n'
+        }
+
         super.getName(api, json[0].senderID, (name) => {
 
-          this.message.body = `@${name} said at ${super.formatDateTime(json[0].timestamp,-5)}: \n\n` + json[0].body;
+          this.message.body = `@${name} said at ${super.formatDateTime(json[0].timestamp,-5)}: \n\n` + json[0].body + '\n\n' + attachments;
 
           this.message.mentions = [{
               tag: "@" + name,
