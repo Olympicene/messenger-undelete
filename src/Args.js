@@ -1,6 +1,5 @@
 var parseArgs = require("minimist");
-var _ = require('lodash');
-
+var _ = require("lodash");
 
 module.exports = class Args {
   constructor(event) {
@@ -24,6 +23,10 @@ module.exports = class Args {
         })
     );
 
+    if (args._.length === 0) {
+      delete args._;
+    }
+
     if (this.ids.length > 0) {
       args["ids"] = _.uniq(this.ids);
     }
@@ -32,11 +35,7 @@ module.exports = class Args {
   }
 
   isEmpty() {
-
-    if (
-      Object.keys(this.removeMentions()).length === 1 &&
-      this.removeMentions()._.length === 0
-    ) {
+    if (Object.keys(this.removeMentions()).length === 0) {
       return true;
     }
     return false;

@@ -71,4 +71,10 @@ module.exports = class Commands {
       var nd = new Date(utc + (3600000*offset));
       return nd.toLocaleString();
   }
+
+  isInt(value) {
+    return !isNaN(value) && 
+           parseInt(Number(value)) == value && 
+           !isNaN(parseInt(value, 10));
+  }
 };
