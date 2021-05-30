@@ -25,7 +25,7 @@ module.exports = class Undelete extends Command {
     let argsList = args.removeMentions();
 
     if (check(["h"], Object.keys(argsList)) && argsList.h === true) {
-      this.message = `
+      this.message.body = `
       Usage:
         !undelete [-h] : help
         !undelete --id=<message id> : find by message id
