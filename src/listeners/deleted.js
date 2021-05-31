@@ -4,13 +4,16 @@ const util = require("util");
 const fs = require("fs");
 const path = require("path");
 
+////////////////////////////////////////////////////Promises&Directories////////////////////////////////////////////////////
+
 const readFilePromise = util.promisify(fs.readFile);
 const writeFilePromise = util.promisify(fs.writeFile);
 
-//should probably move this to a higher class
 function databaseDir(name, thread) {
   return path.resolve(appRoot + `/database/${name}-${thread}.json`);
 }
+
+////////////////////////////////////////////////////CreateDatabases////////////////////////////////////////////////////
 
 async function createDatabases() {
   let databases = [];
@@ -34,6 +37,8 @@ async function createDatabases() {
   } catch (err) {}
 }
 
+////////////////////////////////////////////////////Class////////////////////////////////////////////////////
+
 createDatabases();
 
 module.exports = class Listener {
@@ -44,7 +49,6 @@ module.exports = class Listener {
   async listen(event) {
     if (this.type.indexOf(event.type) > -1) {
       try {
-
         //get history
         let data = await readFilePromise(
           databaseDir("history", event.threadID)
@@ -64,8 +68,11 @@ module.exports = class Listener {
 
         //add deleted message to front of list
         deleted.unshift(history[index]);
+
+        //remove deleted message from history
         history.splice(index, 1);
 
+        //see if deleted is past max length
         if (deleted.length > config.deleted_length) {
           deleted.pop();
         }

@@ -2,9 +2,13 @@ const appRoot = require("app-root-path");
 const Command = require(appRoot + "/src/Command.js");
 const Args = require(appRoot + "/src/Args.js");
 const config = require(appRoot + "/database/config.js");
-const nodeHtmlToImage = require('node-html-to-image')
+const nodeHtmlToImage = require("node-html-to-image");
+const util = require("util");
 const fs = require("fs");
 var path = require("path");
+
+const readFilePromise = util.promisify(fs.readFile);
+const writeFilePromise = util.promisify(fs.writeFile);
 
 function databaseDir(thread) {
   return path.resolve(appRoot + `/database/deleted-${thread}.json`);
@@ -18,66 +22,121 @@ module.exports = class Undelete extends Command {
     this.message = {};
   }
 
-  doAction(event, api) {
-    var args = new Args(event);
+  async doAction(event, api) {
+    this.message.body = "";
+    this.message.mentions = [];
+
+    let args = new Args(event);
 
     let check = (list, target) => target.every((v) => list.includes(v));
     let argsList = args.removeMentions();
 
-    if (check(["h"], Object.keys(argsList)) && argsList.h === true) {
+    if (Object.keys(argsList).length === 0) {
+      try {
+        const data = await readFilePromise(databaseDir(event.threadID));
+
+        let json = JSON.parse(data);
+  
+        this.getMessage(event, api, json[0]);
+      } catch (err) {
+        console.error(err);
+      }
+    } else if (check(["h"], Object.keys(argsList)) && argsList.h === true) {
+
       this.message.body = `
       Usage:
+        !undelete : returns the last deleted message
         !undelete [-h] : help
-        !undelete --id=<message id> : find by message id
-        !undelete --attachments=<# of attachments> : find by # of attachments
-        !undelete --minutes=<message id> : find by how many minutes ago
+        !undelete [-a] : returns all deleted messages
+        !undelete --message : find by regular messages
+        !undelete --message_reply : find by regular message replies
+        !undelete --minutes=<time in minutes> : find by how many minutes ago
+        !undelete --attachment_type={photo | video} : find by attachment type
+        !undelete --timestamp=<timestamp> : find by timestamp
         !undelete @<FirstName LastName> : find by senderID
       `;
       super.send(event, api, this.message);
-    }
 
-    if (check(["id", "ids", "attachments", "minutes"], Object.keys(argsList))) {
-      fs.readFile(databaseDir(event.threadID), (err, data) => {
-        if (err) return console.error(err);
+    } else if (check(["a"], Object.keys(argsList)) && argsList.a === true) {
+      try {
+        const data = await readFilePromise(databaseDir(event.threadID));
+
+        let json = JSON.parse(data);
+  
+        this.sendTable(event, api, json);
+      } catch (err) {
+        console.error(err);
+      }
+    } else if (
+      check(["ids", "message", "message_reply", "minutes", "attachment_type", "timestamp"], Object.keys(argsList))
+    ) {
+      try {
+        const data = await readFilePromise(databaseDir(event.threadID));
 
         var json = JSON.parse(data);
 
-        //filter my message id
-        if(argsList.hasOwnProperty("id")) {
-          json = json.filter(obj => {return obj.messageID === argsList.id})
-        }
-
         //filter by sender id
-        if(argsList.hasOwnProperty("ids")) {
-          var temp = []
-          
-          for(var id in argsList.ids) {
-            temp = temp.concat(json.filter(obj => {return obj.senderID === argsList.ids[id]}))
+        if (argsList.hasOwnProperty("ids")) {
+          var temp = [];
+
+          for (var id in argsList.ids) {
+            temp = temp.concat(
+              json.filter((obj) => {
+                return obj.senderID === argsList.ids[id];
+              })
+            );
           }
-
-          json = temp;
         }
 
-        if(argsList.hasOwnProperty("attachments")) {
-          json = json.filter(obj => {return obj.attachments.length === argsList.attachments})
+        //filter if message
+        if (argsList.hasOwnProperty("message") && argsList.message === true) {
+          json = json.filter((obj) => {
+            return obj.type === "message";
+          });
         }
 
-        if(argsList.hasOwnProperty("minutes")) {
-          let minutesAgo = event.timestamp - argsList.minutes * 60 * 1000
-
-          json = json.filter(obj => {return obj.timestamp > minutesAgo})
+        //filter if message_reply
+        if (argsList.hasOwnProperty("message_reply") && argsList.message_reply === true) {
+          json = json.filter((obj) => {
+            return obj.type === "message_reply";
+          });
         }
 
-        if(json.length === 1) {
-          this.getMessage(event, api, json[0])
-        } else if(json.length === 0) {
-          this.message.body = 'no messages with that filter were found'
+        //filter by how long ago message was sent
+        if (argsList.hasOwnProperty("minutes")) {
+          let minutesAgo = event.timestamp - argsList.minutes * 60 * 1000;
 
-          super.send(event, api, this.message.body)
-        } else if(json.length > 1) {
-          this.sendTable(event, api, json)
+          json = json.filter((obj) => {
+            return obj.timestamp > minutesAgo;
+          });
         }
-      });
+
+        //filter by attachment type
+        if (argsList.hasOwnProperty("attachment_type")) {
+          json = json.filter((obj) => {
+            return obj.attachments.type === argsList.attachment_type;
+          });
+        }
+
+        //find by exact timestamp
+        if (argsList.hasOwnProperty("timestamp")) {
+          json = json.filter((obj) => {
+            return obj.timestamp === argsList.timestamp;
+          });
+        }
+
+        if (json.length === 1) {
+          this.getMessage(event, api, json[0]);
+        } else if (json.length === 0) {
+          this.message.body = "no messages with that filter were found";
+          super.send(event, api, this.message.body);
+        } else if (json.length > 1) {
+          this.sendTable(event, api, json);
+        }
+
+      } catch(err) {
+        console.error(err);
+      }
     }
   }
 
@@ -122,23 +181,39 @@ module.exports = class Undelete extends Command {
     });
   }
 
-  sendTable(event, api, messages) {
-    let table = ''
+  async sendTable(event, api, messages) {
+    let table = "";
+    let attach_type = '';
+    let user;
 
-    for(var mes in messages) {
+    const getUserInfoPromise = util.promisify(api.getUserInfo)  
+
+    for (var mes in messages) {
+
+      if (messages[mes].attachments[0] === undefined) {
+        attach_type = "none"
+      } else {
+        attach_type = messages[mes].attachments[0].type
+      }
+
+      try {
+        user = await getUserInfoPromise(messages[mes].senderID)
+      } catch (err) {}
+
       table += `          
       <tr>
       <th>${messages[mes].timestamp}</th>
+      <th>${user[messages[mes].senderID].name}</th>
       <th>${messages[mes].body.substring(0, 30)}</th>
-      <th>${messages[mes].senderID}</th>
-      <th>${messages[mes].attachments.length}</th>
-      <th>${Object.keys(messages[mes].mentions).length}</th>
-      </tr>`
+      <th>${messages[mes].type}</th>
+      <th>${attach_type}</th>
+      </tr>`;
     }
 
     nodeHtmlToImage({
-      output: appRoot + '/media/image.png',
-      html: `<html>
+      output: appRoot + "/media/image.png",
+      html:
+        `<html>
     
       <head>
           <style type="text/css">
@@ -155,21 +230,24 @@ module.exports = class Undelete extends Command {
           <table style="width:100%">
               <tr>
                   <th>Timestamp</th>
+                  <th>Name</th>
                   <th>Body Preview</th>
-                  <th>Sender ID</th>
+                  <th>Type</th>
                   <th>attachments</th>
-                  <th>mentions</th>
-              </tr>` + table + `
+              </tr>` +
+        table +
+        `
           </table>
       </body>
       
-      </html>`
-    })
-    .then(() => {
-      console.log('The image was created successfully!')
+      </html>`,
+    }).then(() => {
+      console.log("The image was created successfully!");
       this.message.body = "";
-      this.message.attachment = fs.createReadStream(appRoot + "/media/image.png");
-      super.send(event, api, this.message)
-    })
+      this.message.attachment = fs.createReadStream(
+        appRoot + "/media/image.png"
+      );
+      super.send(event, api, this.message);
+    });
   }
 };

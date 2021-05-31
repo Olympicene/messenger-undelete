@@ -4,12 +4,16 @@ const util = require("util");
 const fs = require("fs");
 const path = require("path");
 
+////////////////////////////////////////////////////Promises&Directories////////////////////////////////////////////////////
+
 const readFilePromise = util.promisify(fs.readFile);
 const writeFilePromise = util.promisify(fs.writeFile);
 
 function databaseDir(thread) {
   return path.resolve(appRoot + `/database/history-${thread}.json`);
 }
+
+////////////////////////////////////////////////////CreateDatabases////////////////////////////////////////////////////
 
 async function createDatabases() {
   let databases = [];
@@ -31,6 +35,8 @@ async function createDatabases() {
 
 createDatabases();
 
+////////////////////////////////////////////////////Class////////////////////////////////////////////////////
+
 module.exports = class Listener {
   constructor() {
     this.type = ["message_reply", "message"];
@@ -40,7 +46,7 @@ module.exports = class Listener {
     if (this.type.indexOf(event.type) > -1) {
       try {
         //get buffer from json file
-        const data = await readFilePromise(databaseDir(event.threadID), 'utf-8');
+        const data = await readFilePromise(databaseDir(event.threadID));
 
         let json = JSON.parse(data);
 
