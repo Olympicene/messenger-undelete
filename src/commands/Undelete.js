@@ -8,7 +8,6 @@ const fs = require("fs");
 var path = require("path");
 
 const readFilePromise = util.promisify(fs.readFile);
-const writeFilePromise = util.promisify(fs.writeFile);
 
 function databaseDir(thread) {
   return path.resolve(appRoot + `/database/deleted-${thread}.json`);
@@ -23,8 +22,11 @@ module.exports = class Undelete extends Command {
   }
 
   async doAction(event, api) {
+
+    //do not delete these i swear to god
     this.message.body = "";
     this.message.mentions = [];
+    this.message.attachment = [];
 
     let args = new Args(event);
 
@@ -51,7 +53,7 @@ module.exports = class Undelete extends Command {
         !undelete --message : find by regular messages
         !undelete --message_reply : find by regular message replies
         !undelete --minutes=<time in minutes> : find by how many minutes ago
-        !undelete --attachment_type={photo | video} : find by attachment type
+        !undelete --attachment={photo | video} : find by attachment type
         !undelete --timestamp=<timestamp> : find by timestamp
         !undelete @<FirstName LastName> : find by senderID
       `;
@@ -68,7 +70,7 @@ module.exports = class Undelete extends Command {
         console.error(err);
       }
     } else if (
-      check(["ids", "message", "message_reply", "minutes", "attachment_type", "timestamp"], Object.keys(argsList))
+      check(["ids", "message", "message_reply", "minutes", "attachment", "timestamp"], Object.keys(argsList))
     ) {
       try {
         const data = await readFilePromise(databaseDir(event.threadID));
@@ -86,6 +88,8 @@ module.exports = class Undelete extends Command {
               })
             );
           }
+
+          json = temp;
         }
 
         //filter if message
@@ -112,16 +116,20 @@ module.exports = class Undelete extends Command {
         }
 
         //filter by attachment type
-        if (argsList.hasOwnProperty("attachment_type")) {
+        if (argsList.hasOwnProperty("attachment")) {
           json = json.filter((obj) => {
-            return obj.attachments.type === argsList.attachment_type;
+              if (obj.attachments.length > 0) {
+                return obj.attachments[0].type === argsList.attachment
+              } else {
+                return false
+              }
           });
         }
 
         //find by exact timestamp
         if (argsList.hasOwnProperty("timestamp")) {
           json = json.filter((obj) => {
-            return obj.timestamp === argsList.timestamp;
+            return obj.timestamp === argsList.timestamp.toString();
           });
         }
 
@@ -233,7 +241,7 @@ module.exports = class Undelete extends Command {
                   <th>Name</th>
                   <th>Body Preview</th>
                   <th>Type</th>
-                  <th>attachments</th>
+                  <th>Attachment</th>
               </tr>` +
         table +
         `

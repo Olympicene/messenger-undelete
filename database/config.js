@@ -23,7 +23,7 @@ exports.ignored_listeners = [
 
 exports.apiOptions = {
   listenEvents: true,
-  selfListen: true,
+  selfListen: false,
   forceLogin: true,
 };
 
