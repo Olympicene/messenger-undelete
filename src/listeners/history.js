@@ -44,15 +44,13 @@ module.exports = class Listener {
 
         let json = JSON.parse(data);
 
-        //console.log(event)
-
         //adds to front of json
         json.unshift(event);
 
         //removes json file if history gets too long
-        // if (json.length > config.history_length) {
-        //   json.pop();
-        // }
+        if (json.length > config.history_length) {
+          json.pop();
+        }
 
         //write json file with new object
         await writeFilePromise(
