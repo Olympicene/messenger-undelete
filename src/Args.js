@@ -8,6 +8,7 @@ module.exports = class Args {
     this.ids = [];
   }
 
+  //removes all mentions from args so that it will look like a command line arg
   removeMentions() {
     for (var mention in this.event.mentions) {
       this.ids.push(mention);
@@ -34,6 +35,7 @@ module.exports = class Args {
     return args;
   }
 
+  //suprise suprise checks if theres no arguements in the message
   isEmpty() {
     if (Object.keys(this.removeMentions()).length === 0) {
       return true;
@@ -41,6 +43,7 @@ module.exports = class Args {
     return false;
   }
 
+  //probably should use this for clarity
   getArgs() {
     return this.removeMentions();
   }

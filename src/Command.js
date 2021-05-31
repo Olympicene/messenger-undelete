@@ -7,6 +7,8 @@ var parseArgs = require("minimist");
 module.exports = class Commands {
   constructor() {}
 
+  //self explanatory just helper functions
+
   listen(event, api, use) {
     if (this.typeIsCorrect(event)) {
       try {
