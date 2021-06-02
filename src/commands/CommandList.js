@@ -8,7 +8,7 @@ const fs = require("fs");
 module.exports = class CommandList extends Command {
   constructor() {
     super()
-    this.description = "displays list of commands";
+    this.description = ": displays list of commands";
     this.type = ["message", "message_reply"];
     this.message = {}
   }
