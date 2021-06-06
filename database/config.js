@@ -14,6 +14,7 @@ exports.allowed_threads = [
 ];
 
 exports.ignored_commands = [
+  "CommandList",
   "ExampleCommand",
 ];
 

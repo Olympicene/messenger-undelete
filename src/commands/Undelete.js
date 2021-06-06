@@ -34,6 +34,7 @@ module.exports = class Undelete extends Command {
     let check = (list, target) => target.every((v) => list.includes(v));
     let argsList = args.removeMentions();
 
+    //everything underneath this is a crime against optimization and humanity
     if (Object.keys(argsList).length === 0) {
       try {
         const data = await readFilePromise(databaseDir(event.threadID));
@@ -190,6 +191,8 @@ module.exports = class Undelete extends Command {
     });
   }
 
+
+  //it creates the table i got lazy here
   async sendTable(event, api, messages) {
     let table = "";
     let attach_type = '';
