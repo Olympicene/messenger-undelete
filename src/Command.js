@@ -66,17 +66,19 @@ module.exports = class Commands {
     });
   }
 
-  formatDateTime(timeEpoch, offset){
-      timeEpoch = parseInt(timeEpoch);
-      var d = new Date(timeEpoch);
-      var utc = d.getTime() + (d.getTimezoneOffset() * 60000);  //This converts to UTC 00:00
-      var nd = new Date(utc + (3600000*offset));
-      return nd.toLocaleString();
+  formatDateTime(timeEpoch, offset) {
+    timeEpoch = parseInt(timeEpoch);
+    var d = new Date(timeEpoch);
+    var utc = d.getTime() + d.getTimezoneOffset() * 60000; //This converts to UTC 00:00
+    var nd = new Date(utc + 3600000 * offset);
+    return nd.toLocaleString();
   }
 
   isInt(value) {
-    return !isNaN(value) && 
-           parseInt(Number(value)) == value && 
-           !isNaN(parseInt(value, 10));
+    return (
+      !isNaN(value) &&
+      parseInt(Number(value)) == value &&
+      !isNaN(parseInt(value, 10))
+    );
   }
 };

@@ -16,14 +16,13 @@ function databaseDir(thread) {
 module.exports = class Undelete extends Command {
   constructor() {
     super();
-    this.term = "undelete"
+    this.term = "undelete";
     this.description = "[-h]";
     this.type = ["message", "message_reply"];
     this.message = {};
   }
 
   async doAction(event, api) {
-
     //do not delete these i swear to god
     this.message.body = "";
     this.message.mentions = [];
@@ -40,39 +39,53 @@ module.exports = class Undelete extends Command {
         const data = await readFilePromise(databaseDir(event.threadID));
 
         let json = JSON.parse(data);
-  
+
         this.getMessage(event, api, json[0]);
       } catch (err) {
         console.error(err);
       }
     } else if (check(["h"], Object.keys(argsList)) && argsList.h === true) {
-
       this.message.body = `
       Usage:
         ${config.prefix + this.term} : returns the last deleted message
         ${config.prefix + this.term} [-h] : help
         ${config.prefix + this.term} [-a] : returns all deleted messages
         ${config.prefix + this.term} --message : find by regular messages
-        ${config.prefix + this.term} --message_reply : find by regular message replies
-        ${config.prefix + this.term} --minutes=<time in minutes> : find by how many minutes ago
-        ${config.prefix + this.term} --attachment={photo | video} : find by attachment type
+        ${
+          config.prefix + this.term
+        } --message_reply : find by regular message replies
+        ${
+          config.prefix + this.term
+        } --minutes=<time in minutes> : find by how many minutes ago
+        ${
+          config.prefix + this.term
+        } --attachment={photo | video} : find by attachment type
         ${config.prefix + this.term} --timestamp=<timestamp> : find by timestamp
         ${config.prefix + this.term} @<FirstName LastName> : find by senderID
       `;
       super.send(event, api, this.message);
-
     } else if (check(["a"], Object.keys(argsList)) && argsList.a === true) {
       try {
         const data = await readFilePromise(databaseDir(event.threadID));
 
         let json = JSON.parse(data);
-  
+
         this.sendTable(event, api, json);
       } catch (err) {
         console.error(err);
       }
     } else if (
-      check(["ids", "message", "message_reply", "minutes", "attachment", "timestamp"], Object.keys(argsList))
+      check(
+        [
+          "ids",
+          "message",
+          "message_reply",
+          "minutes",
+          "attachment",
+          "timestamp",
+        ],
+        Object.keys(argsList)
+      )
     ) {
       try {
         const data = await readFilePromise(databaseDir(event.threadID));
@@ -102,7 +115,10 @@ module.exports = class Undelete extends Command {
         }
 
         //filter if message_reply
-        if (argsList.hasOwnProperty("message_reply") && argsList.message_reply === true) {
+        if (
+          argsList.hasOwnProperty("message_reply") &&
+          argsList.message_reply === true
+        ) {
           json = json.filter((obj) => {
             return obj.type === "message_reply";
           });
@@ -120,11 +136,11 @@ module.exports = class Undelete extends Command {
         //filter by attachment type
         if (argsList.hasOwnProperty("attachment")) {
           json = json.filter((obj) => {
-              if (obj.attachments.length > 0) {
-                return obj.attachments[0].type === argsList.attachment
-              } else {
-                return false
-              }
+            if (obj.attachments.length > 0) {
+              return obj.attachments[0].type === argsList.attachment;
+            } else {
+              return false;
+            }
           });
         }
 
@@ -143,8 +159,7 @@ module.exports = class Undelete extends Command {
         } else if (json.length > 1) {
           this.sendTable(event, api, json);
         }
-
-      } catch(err) {
+      } catch (err) {
         console.error(err);
       }
     }
@@ -191,25 +206,23 @@ module.exports = class Undelete extends Command {
     });
   }
 
-
   //it creates the table i got lazy here
   async sendTable(event, api, messages) {
     let table = "";
-    let attach_type = '';
+    let attach_type = "";
     let user;
 
-    const getUserInfoPromise = util.promisify(api.getUserInfo)  
+    const getUserInfoPromise = util.promisify(api.getUserInfo);
 
     for (var mes in messages) {
-
       if (messages[mes].attachments[0] === undefined) {
-        attach_type = "none"
+        attach_type = "none";
       } else {
-        attach_type = messages[mes].attachments[0].type
+        attach_type = messages[mes].attachments[0].type;
       }
 
       try {
-        user = await getUserInfoPromise(messages[mes].senderID)
+        user = await getUserInfoPromise(messages[mes].senderID);
       } catch (err) {}
 
       table += `          

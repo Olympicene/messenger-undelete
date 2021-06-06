@@ -23,7 +23,9 @@ console.log(Object.keys(commandList));
 ////////////////////////////////////////////////////GetListeners////////////////////////////////////////////////////
 
 let listenerList = [];
-let ignoredlisteners = config.ignored_listeners.map((command) => command + ".js");
+let ignoredlisteners = config.ignored_listeners.map(
+  (command) => command + ".js"
+);
 
 fs.readdirSync(__dirname + "/listeners").forEach((file) => {
   if (!ignoredlisteners.includes(file)) {
@@ -57,15 +59,18 @@ module.exports = class Listener {
       }
 
       //check if message and if commands are in timeout
-      if (["message", "message_reply"].indexOf(event.type) > -1 && !use.inTimeout(event.threadID)) {
+      if (
+        ["message", "message_reply"].indexOf(event.type) > -1 &&
+        !use.inTimeout(event.threadID)
+      ) {
         let term = event.body.split(" ")[0].toLowerCase();
 
         //get command from term
         if (term.charAt(0) === config.prefix) {
           try {
-            commandList[term].listen(event, api, use)
+            commandList[term].listen(event, api, use);
           } catch (err) {
-            console.log(`invalid command: ${term}`)
+            console.log(`invalid command: ${term}`);
           }
         }
       }

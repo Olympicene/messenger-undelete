@@ -12,7 +12,6 @@ login(
   (err, api) => {
     if (err) return console.error(err);
 
-
     fs.writeFileSync(
       databaseDir + "/appstate.json",
       JSON.stringify(api.getAppState())
@@ -28,7 +27,9 @@ login(
       if (err) return console.error(err);
 
       //DEBUG
-      if(config.DEBUG) {console.log(event)}
+      if (config.DEBUG) {
+        console.log(event);
+      }
 
       //commands
       eventListener.receive(event, api);
