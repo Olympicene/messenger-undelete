@@ -3,8 +3,6 @@ const Command = require(appRoot + "/src/Command.js");
 const config = require(appRoot + "/database/config.js");
 const fs = require("fs");
 
-
-
 module.exports = class CommandList extends Command {
   constructor() {
     super()

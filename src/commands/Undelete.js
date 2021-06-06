@@ -16,6 +16,7 @@ function databaseDir(thread) {
 module.exports = class Undelete extends Command {
   constructor() {
     super();
+    this.term = "undelete"
     this.description = "[-h]";
     this.type = ["message", "message_reply"];
     this.message = {};
@@ -47,15 +48,15 @@ module.exports = class Undelete extends Command {
 
       this.message.body = `
       Usage:
-        !undelete : returns the last deleted message
-        !undelete [-h] : help
-        !undelete [-a] : returns all deleted messages
-        !undelete --message : find by regular messages
-        !undelete --message_reply : find by regular message replies
-        !undelete --minutes=<time in minutes> : find by how many minutes ago
-        !undelete --attachment={photo | video} : find by attachment type
-        !undelete --timestamp=<timestamp> : find by timestamp
-        !undelete @<FirstName LastName> : find by senderID
+        ${config.prefix + this.term} : returns the last deleted message
+        ${config.prefix + this.term} [-h] : help
+        ${config.prefix + this.term} [-a] : returns all deleted messages
+        ${config.prefix + this.term} --message : find by regular messages
+        ${config.prefix + this.term} --message_reply : find by regular message replies
+        ${config.prefix + this.term} --minutes=<time in minutes> : find by how many minutes ago
+        ${config.prefix + this.term} --attachment={photo | video} : find by attachment type
+        ${config.prefix + this.term} --timestamp=<timestamp> : find by timestamp
+        ${config.prefix + this.term} @<FirstName LastName> : find by senderID
       `;
       super.send(event, api, this.message);
 
