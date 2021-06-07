@@ -5,18 +5,20 @@ const fs = require("fs");
 
 module.exports = class CommandList extends Command {
   constructor() {
-    super()
+    super();
     this.description = ": displays list of commands";
     this.type = ["message", "message_reply"];
-    this.message = {}
+    this.message = {};
   }
 
   doAction(event, api) {
     //honest to god no idea why this works
 
     let commandList = [];
-    let ignoredcommands = config.ignored_commands.map((command) => command + ".js");
-    
+    let ignoredcommands = config.ignored_commands.map(
+      (command) => command + ".js"
+    );
+
     fs.readdirSync(__dirname).forEach((file) => {
       if (!ignoredcommands.includes(file)) {
         commandList.push(require("./" + file));
@@ -24,11 +26,12 @@ module.exports = class CommandList extends Command {
     });
 
     for (var command in commandList) {
-      var com = new commandList[command]()
-      commandList[command] = config.prefix + com.constructor.name + ' ' + com.description + '\n'
+      var com = new commandList[command]();
+      commandList[command] =
+        config.prefix + com.constructor.name + " " + com.description + "\n";
     }
 
-    this.message.body = ""; 
+    this.message.body = "";
 
     for (var command in commandList) {
       this.message.body += commandList[command];

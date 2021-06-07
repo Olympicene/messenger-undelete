@@ -13,14 +13,9 @@ exports.allowed_threads = [
   "4258360417509656",
 ];
 
-exports.ignored_commands = [
-  "CommandList",
-  "ExampleCommand",
-];
+exports.ignored_commands = ["CommandList", "ExampleCommand"];
 
-exports.ignored_listeners = [
-  "TEMPORARY_DELETE_LATER",
-];
+exports.ignored_listeners = ["TEMPORARY_DELETE_LATER"];
 
 exports.apiOptions = {
   listenEvents: true,
