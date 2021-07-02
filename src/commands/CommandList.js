@@ -11,7 +11,7 @@ module.exports = class CommandList extends Command {
     this.message = {};
   }
 
-  doAction(event, api) {
+  async doAction(event, api) {
     //honest to god no idea why this works
 
     let commandList = [];
