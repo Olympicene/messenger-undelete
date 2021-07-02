@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Olympicene/messenger-meme#readme",
   "dependencies": {
     "app-root-path": "^3.0.0",
+    "dotenv": "^10.0.0",
     "facebook-chat-api": "^1.8.0",
     "fluent-ffmpeg": "^2.1.2",
     "fs": "0.0.1-security",
@@ -28,7 +29,8 @@
     "npm-check-updates": "^11.2.1",
     "parse-duration": "^1.0.0",
     "path": "^0.12.7",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "tiktok-scraper": "^1.4.32"
   },
   "devDependencies": {
     "electron-rebuild": "^2.3.5"
