@@ -8,7 +8,7 @@ const fetch = require("node-fetch");
 module.exports = class ExampleCommand extends Command {
   constructor() {
     super();
-    this.description = " ";
+    this.description = ": reply to an image to find source ";
     this.type = ["message_reply"];
     this.message = {};
   }
@@ -29,6 +29,8 @@ module.exports = class ExampleCommand extends Command {
       method: "POST",
       body: formData,
     }).then((e) => e.json());
+
+    ////////////////////////////////////////////////////SEND_TO_MESSENGER////////////////////////////////////////////////////
 
     this.message.body = 
       `${search.result[0].anilist.title.native}\n` +

@@ -15,20 +15,21 @@ module.exports = class CommandList extends Command {
     //honest to god no idea why this works
 
     let commandList = [];
-    let ignoredcommands = config.ignored_commands.map(
-      (command) => command + ".js"
-    );
-
+    let ignoredcommands = config.ignored_commands.map((command) => command + ".js");
+    
     fs.readdirSync(__dirname).forEach((file) => {
       if (!ignoredcommands.includes(file)) {
-        commandList.push(require("./" + file));
+        let term = config.prefix + file.slice(0, -3).toLowerCase();
+    
+        let command = require("./" + file);
+    
+        commandList[term] = new command();
       }
     });
-
+    
     for (var command in commandList) {
-      var com = new commandList[command]();
       commandList[command] =
-        config.prefix + com.constructor.name + " " + com.description + "\n";
+        command + " " + commandList[command].description + "\n";
     }
 
     this.message.body = "";
