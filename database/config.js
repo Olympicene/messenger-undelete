@@ -13,7 +13,7 @@ exports.allowed_threads = [
   "4258360417509656",
 ];
 
-exports.ignored_commands = ["ExampleCommand", "Undelete"];
+exports.ignored_commands = ["ExampleCommand"];
 
 exports.ignored_listeners = ["TEST"];
 

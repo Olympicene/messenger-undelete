@@ -4,6 +4,9 @@ const config = require("./database/config.js");
 const login = require("facebook-chat-api");
 const Listener = require("./src/EventListener.js");
 
+require('dotenv').config()
+
+
 ////////////////////////////////////////////////////LoginWithCookies////////////////////////////////////////////////////
 const databaseDir = path.resolve(__dirname + "/database/");
 

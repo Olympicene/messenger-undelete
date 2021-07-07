@@ -5,4 +5,4 @@ media/*
 /database/*.json
 !/database/example-appstate.json
 .vscode
-
+.env
