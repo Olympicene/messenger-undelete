@@ -8,7 +8,7 @@ const fetch = require("node-fetch");
 module.exports = class ExampleCommand extends Command {
   constructor() {
     super();
-    this.description = " ";
+    this.description = " : reply to an screenshot to get source";
     this.type = ["message_reply"];
     this.message = {};
   }
