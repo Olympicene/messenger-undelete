@@ -24,7 +24,7 @@ login(
     api.setOptions(config.apiOptions);
 
     ////////////////////////////////////////////////////ListenLoop////////////////////////////////////////////////////
-    var eventListener = new Listener(api);
+    var eventListener = new Listener();
 
     api.listenMqtt((err, event) => {
       if (err) return console.error(err);
