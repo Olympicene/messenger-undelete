@@ -11,16 +11,20 @@ module.exports = class Commands {
 
   listen(message, send, error, use) {
     if (this.typeIsCorrect(message)) {
-      try {
-        this.doAction(message, send, error);
-        use.threadTimeout(message.threadID);
-      } catch (err) {
-        error(`error starting command: ${err}`, message.threadID, message.ID);
+      if (this.argumentIsCorrect(message)) {
+        try {
+          this.doAction(message, send, error);
+          use.threadTimeout(message.threadID);
+        } catch (err) {
+          error(`error starting command: ${err}`, message.threadID, message.ID);
+        }
+      } else {
+        error(`invalid arguments present`, message.threadID, message.ID);
       }
     } else {
       error(
-        `incorrect message type: ${message.type}\n` + 
-        `this command needs: ${this.type}`,
+        `incorrect message type: ${message.type}\n` +
+          `this command needs: ${this.type}`,
         message.threadID,
         message.ID
       );
@@ -38,6 +42,17 @@ module.exports = class Commands {
       return true;
     }
     return false;
+  }
+
+  argumentIsCorrect(message) {
+    //check if message type and term is valid
+    for (var option in message.body) {
+      if (this.arguments[option] != message.body[option].length) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   async downloadFile(url, path) {

@@ -2,8 +2,6 @@ const appRoot = require("app-root-path");
 const config = require(`${appRoot}/database/config.js`);
 const bodyParse = require(`${appRoot}/src/helper/BodyParse.js`)
 
-
-
 ////////////////////////////////////////////////////EXPORT_OBJECT////////////////////////////////////////////////////
 
 module.exports = class Message {

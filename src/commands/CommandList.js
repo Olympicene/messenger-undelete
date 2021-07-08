@@ -7,6 +7,7 @@ module.exports = class CommandList extends Command {
   constructor() {
     super();
     this.description = ": displays list of commands";
+    this.arguments = { _:1}
     this.type = ["message"];
     this.message = {};
   }
