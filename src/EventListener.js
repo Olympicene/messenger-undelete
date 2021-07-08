@@ -3,7 +3,6 @@ const config = require(`${appRoot}/database/config.js`);
 
 const Timeout = require(`${appRoot}/src/Timeout.js`);
 const Message = require(`${appRoot}/src/helper/Message.js`);
-const Send = require(`${appRoot}/src/helper/Send.js`);
 
 const fs = require("fs");
 
@@ -52,15 +51,14 @@ const use = new Timeout(config.timeout_milliseconds);
 module.exports = class Listener {
   constructor() {}
 
-  receive(event, api) {
+  receive(event, send, error) {
     var message = new Message(event);
 
     if (
       message.threadID != undefined &&
       config.allowed_threads.indexOf(message.threadID) > -1
     ) {
-
-      //console.log(message)
+      console.log(message)
 
       //get all listeners --[temp disabled]
       // for (let index in listenerList) {
@@ -74,9 +72,13 @@ module.exports = class Listener {
       ) {
         if (message.isCommand) {
           try {
-            commandList[message.term].listen(event, api, use);
+            commandList[message.term].listen(message, send, error, use);
           } catch (err) {
-            Send.error(event, api, `invalid command: ${message.term}`, message.ID);
+            error(
+              `invalid command: ${message.term}`,
+              message.threadID,
+              message.ID
+            );
           }
         }
       }

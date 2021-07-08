@@ -7,13 +7,13 @@ module.exports = class CommandList extends Command {
   constructor() {
     super();
     this.description = ": displays list of commands";
-    this.type = ["message", "message_reply"];
+    this.type = ["message"];
     this.message = {};
   }
 
-  async doAction(event, api) {
-    //honest to god no idea why this works
+  async doAction(message, send, error) {
 
+    //ok i know why this works now
     let commandList = [];
     let ignoredcommands = config.ignored_commands.map((command) => command + ".js");
     
@@ -38,9 +38,6 @@ module.exports = class CommandList extends Command {
       this.message.body += commandList[command];
     }
 
-    api.sendMessage(this.message, event.threadID, (err) => {
-      //send thread stuff
-      if (err) return console.error(err);
-    });
+    send(this.message, message.threadID)
   }
 };

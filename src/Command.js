@@ -9,40 +9,35 @@ module.exports = class Commands {
 
   //self explanatory just helper functions
 
-  listen(event, api, use) {
-    if (this.typeIsCorrect(event)) {
+  listen(message, send, error, use) {
+    if (this.typeIsCorrect(message)) {
       try {
-        this.doAction(event, api);
-        use.threadTimeout(event.threadID);
-      } catch (e) {
-        console.error(e);
+        this.doAction(message, send, error);
+        use.threadTimeout(message.threadID);
+      } catch (err) {
+        error(`error starting command: ${err}`, message.threadID, message.ID);
       }
+    } else {
+      error(
+        `incorrect message type: ${message.type}\n` + 
+        `this command needs: ${this.type}`,
+        message.threadID,
+        message.ID
+      );
     }
   }
 
-  doAction(event, api) {
+  doAction(message, send, error) {
     //abstract
     throw "Abstract method not implemented";
   }
 
-  typeIsCorrect(event) {
+  typeIsCorrect(message) {
     //check if message type and term is valid
-    if (this.type.indexOf(event.type) > -1) {
+    if (this.type.indexOf(message.type) > -1) {
       return true;
     }
     return false;
-  }
-
-  getContent(event) {
-    //gets added content of command
-    return parseArgs(event.body.split(" ").slice(1));
-  }
-
-  getName(api, id, fn) {
-    api.getUserInfo(id, (err, ret) => {
-      if (err) return console.error(err);
-      fn(ret[id].name);
-    });
   }
 
   async downloadFile(url, path) {
@@ -52,17 +47,6 @@ module.exports = class Commands {
       res.body.pipe(fileStream);
       res.body.on("error", reject);
       fileStream.on("finish", resolve);
-    });
-  }
-
-  async send(event, api, message) {
-    await new Promise((resolve) => {
-      api.sendMessage(message, event.threadID, (err) => {
-        //send thread stuff
-        if (err) return console.error(err);
-
-        resolve();
-      });
     });
   }
 

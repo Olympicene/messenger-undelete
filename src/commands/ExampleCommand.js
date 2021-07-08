@@ -10,5 +10,5 @@ module.exports = class ExampleCommand extends Command {
     this.message = {};
   }
 
-  async doAction(event, api) {}
+  async doAction(message, send, error) {}
 };

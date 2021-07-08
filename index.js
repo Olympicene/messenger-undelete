@@ -4,8 +4,7 @@ const config = require("./database/config.js");
 const login = require("facebook-chat-api");
 const Listener = require("./src/EventListener.js");
 
-require('dotenv').config()
-
+require("dotenv").config();
 
 ////////////////////////////////////////////////////LoginWithCookies////////////////////////////////////////////////////
 const databaseDir = path.resolve(__dirname + "/database/");
@@ -23,6 +22,35 @@ login(
     ////////////////////////////////////////////////////SetAPIOptions////////////////////////////////////////////////////
     api.setOptions(config.apiOptions);
 
+    ////////////////////////////////////////////////////SendHelper////////////////////////////////////////////////////
+    function send(contents, threadID, replyID) {
+      new Promise((resolve, reject) => {
+        api.sendMessage(contents, threadID, (err) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            resolve(`message sent`);
+          }, replyID);
+      });
+    }
+
+    ////////////////////////////////////////////////////ErrorHelper////////////////////////////////////////////////////
+    function error(errorMessage, threadID, replyID) {
+      contents = {};
+      contents.body = errorMessage;
+      console.log(errorMessage);
+    
+      new Promise((resolve) => {
+        api.sendMessage(contents, threadID, (err) => {
+          if (err) return console.error(err);
+    
+          resolve();
+        }, replyID);
+      });
+    }
+
     ////////////////////////////////////////////////////ListenLoop////////////////////////////////////////////////////
     var eventListener = new Listener();
 
@@ -35,7 +63,7 @@ login(
       }
 
       //commands
-      eventListener.receive(event, api);
+      eventListener.receive(event, send, error);
     });
   }
 );
