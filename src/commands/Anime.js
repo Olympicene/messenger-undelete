@@ -5,6 +5,7 @@ var FormData = require("form-data");
 var fs = require("fs");
 const fetch = require("node-fetch");
 
+
 module.exports = class ExampleCommand extends Command {
   constructor() {
     super();
@@ -14,7 +15,11 @@ module.exports = class ExampleCommand extends Command {
     this.message = {};
   }
 
-  async doAction(message, send, error) {
+  async doAction(message, send, error, typingIndicator) {
+    //maybe temp but only way i can get the typing indicator
+    var stop = typingIndicator(message.threadID);
+    var id = setInterval(() => {typingIndicator(message.threadID)}, 5000);
+
     var url = message.messageReply.attachments[0].url;
     const imageLocation = appRoot + `/media/anime.png`;
     const videoLocation = appRoot + `/media/anime.mp4`;
@@ -51,5 +56,10 @@ module.exports = class ExampleCommand extends Command {
     this.message.attachment = fs.createReadStream(videoLocation);
 
     send(this.message, message.threadID, message.messageReply.messageID);
+
+    //maybe temp but only way i can get the typing indicator
+    stop();
+    clearInterval(id);
+    return;
   }
 };

@@ -14,10 +14,10 @@ login(
   (err, api) => {
     if (err) return console.error(err);
 
-    fs.writeFileSync(
-      databaseDir + "/appstate.json",
-      JSON.stringify(api.getAppState())
-    ); //store cookies
+    // fs.writeFileSync(
+    //   databaseDir + "/appstate.json",
+    //   JSON.stringify(api.getAppState())
+    // ); //store cookies
 
     ////////////////////////////////////////////////////SetAPIOptions////////////////////////////////////////////////////
     api.setOptions(config.apiOptions);
@@ -42,12 +42,23 @@ login(
       contents.body = errorMessage;
       console.log(errorMessage);
     
-      new Promise((resolve) => {
+      new Promise((resolve, reject) => {
         api.sendMessage(contents, threadID, (err) => {
-          if (err) return console.error(err);
+          if (err) {
+            reject(err);
+            return;
+          }
     
           resolve();
         }, replyID);
+      });
+    }
+    ////////////////////////////////////////////////////ListenLoop////////////////////////////////////////////////////
+    function typingIndicator(threadID) {
+      return api.sendTypingIndicator(threadID, (err) => {
+        if (err) {
+          console.log(err)
+        }
       });
     }
 
@@ -63,7 +74,7 @@ login(
       }
 
       //commands
-      eventListener.receive(event, send, error);
+      eventListener.receive(event, send, error, typingIndicator);
     });
   }
 );

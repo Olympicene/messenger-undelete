@@ -8,11 +8,16 @@ module.exports = class Commands {
 
   //self explanatory just helper functions
 
-  listen(message, send, error, use) {
+  listen(message, send, error, use, typingIndicator) {
     if (this.typeIsCorrect(message)) {
       if (this.argumentIsCorrect(message)) {
         try {
-          this.doAction(message, send, error);
+
+
+          this.doAction(message, send, error, typingIndicator);
+
+
+
           use.threadTimeout(message.threadID);
         } catch (err) {
           error(`error starting command: ${err}`, message.threadID, message.ID);
