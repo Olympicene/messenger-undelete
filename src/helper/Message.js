@@ -7,14 +7,16 @@ const bodyParse = require(`${appRoot}/src/helper/BodyParse.js`)
 module.exports = class Message {
   constructor(event) {
     return {
-      type: event.type,
+      type: bodyParse.typeFilter(event),
       senderID: event.senderID,
       ID: event.messageID,
       threadID: event.threadID,
       hasAttachments: (event.attachments && event.attachments.length) > 0,
       isCommand: bodyParse.isCommand(event.body),
       body: bodyParse.parseBody(event.body),
-      term: bodyParse.getTerm(event.body)
+      term: bodyParse.getTerm(event.body),
+      messageReply: event.messageReply
+      
     };
   }
 };

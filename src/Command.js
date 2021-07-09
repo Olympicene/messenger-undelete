@@ -1,8 +1,7 @@
 const fetch = require("node-fetch");
 var path = require("path");
 const fs = require("fs");
-var ffmpeg = require("fluent-ffmpeg");
-var parseArgs = require("minimist");
+
 
 module.exports = class Commands {
   constructor() {}

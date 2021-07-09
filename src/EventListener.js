@@ -58,7 +58,7 @@ module.exports = class Listener {
       message.threadID != undefined &&
       config.allowed_threads.indexOf(message.threadID) > -1
     ) {
-      //console.log(message)
+      console.log(message)
 
       //get all listeners --[temp disabled]
       // for (let index in listenerList) {

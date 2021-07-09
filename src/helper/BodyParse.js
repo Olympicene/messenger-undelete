@@ -59,3 +59,13 @@ exports.getTerm = (text) => {
 
   return message._[0]
 }
+
+exports.typeFilter = (event) => {
+  var type = event.type;
+
+  if((event.messageReply && event.messageReply.attachments.length) > 0) {
+    type += `_${event.messageReply.attachments.length}_attachments`
+  }
+
+  return type;
+}
