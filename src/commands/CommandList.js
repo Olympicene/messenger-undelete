@@ -12,7 +12,10 @@ module.exports = class CommandList extends Command {
     this.message = {};
   }
 
-  async doAction(message, send, error) {
+  async doAction(message, send, error, typingIndicator) {
+    //maybe temp but only way i can get the typing indicator
+    var stop = typingIndicator(message.threadID);
+    var id = setInterval(() => {typingIndicator(message.threadID)}, 5000);
 
     //ok i know why this works now
     let commandList = [];
@@ -40,5 +43,10 @@ module.exports = class CommandList extends Command {
     }
 
     send(this.message, message.threadID)
+    
+    //maybe temp but only way i can get the typing indicator
+    stop();
+    clearInterval(id);
+    return;
   }
 };

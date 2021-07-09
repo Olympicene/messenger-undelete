@@ -51,7 +51,7 @@ const use = new Timeout(config.timeout_milliseconds);
 module.exports = class Listener {
   constructor() {}
 
-  receive(event, send, error) {
+  receive(event, send, error, typingIndicator) {
     var message = new Message(event);
 
     if (
@@ -62,13 +62,12 @@ module.exports = class Listener {
       // for (let index in listenerList) {
       //   listenerList[index].listen(message);
       // }
-      console.log(message.type.slice(0, 7) == `message`)
 
       //check if message and if commands are in timeout
       if (message.type.slice(0, 7) == `message` && !use.inTimeout(message.threadID)) {
         if (message.isCommand) {
           try {
-            commandList[message.term].listen(message, send, error, use);
+            commandList[message.term].listen(message, send, error, use, typingIndicator);
           } catch (err) {
             error(
               `invalid command: ${message.term}`,
