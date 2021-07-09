@@ -16,6 +16,9 @@ module.exports = class ExampleCommand extends Command {
     var stop = typingIndicator(message.threadID);
     var id = setInterval(() => {typingIndicator(message.threadID)}, 5000);
 
+    
+
+
     //maybe temp but only way i can get the typing indicator
     stop();
     clearInterval(id);
