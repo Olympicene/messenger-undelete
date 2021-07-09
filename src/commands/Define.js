@@ -8,7 +8,7 @@ const fs = require("fs");
 module.exports = class ExampleCommand extends Command {
   constructor() {
     super();
-    this.description = " ";
+    this.description = " : defines a term in double quotes after command";
     this.arguments = { _: 2 };
     this.type = ["message", "message_reply"];
     this.message = {};
