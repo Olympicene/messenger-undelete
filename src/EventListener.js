@@ -1,7 +1,10 @@
 const appRoot = require("app-root-path");
-const config = require(appRoot + "/database/config.js");
+const config = require(`${appRoot}/database/config.js`);
+
+const Timeout = require(`${appRoot}/src/Timeout.js`);
+const Message = require(`${appRoot}/src/helper/Message.js`);
+
 const fs = require("fs");
-const Timeout = require("./Timeout");
 
 ////////////////////////////////////////////////////GetCommands////////////////////////////////////////////////////
 
@@ -22,22 +25,22 @@ console.log(Object.keys(commandList));
 
 ////////////////////////////////////////////////////GetListeners////////////////////////////////////////////////////
 
-let listenerList = [];
-let ignoredlisteners = config.ignored_listeners.map(
-  (command) => command + ".js"
-);
+// let listenerList = [];
+// let ignoredlisteners = config.ignored_listeners.map(
+//   (command) => command + ".js"
+// );
 
-fs.readdirSync(__dirname + "/listeners").forEach((file) => {
-  if (!ignoredlisteners.includes(file)) {
-    let term = file.slice(0, -3).toLowerCase();
+// fs.readdirSync(__dirname + "/listeners").forEach((file) => {
+//   if (!ignoredlisteners.includes(file)) {
+//     let term = file.slice(0, -3).toLowerCase();
 
-    let listener = require("./listeners/" + file);
+//     let listener = require("./listeners/" + file);
 
-    listenerList[term] = new listener();
-  }
-});
+//     listenerList[term] = new listener();
+//   }
+// });
 
-console.log(Object.keys(listenerList));
+// console.log(Object.keys(listenerList));
 
 ////////////////////////////////////////////////////Timeout////////////////////////////////////////////////////
 
@@ -48,29 +51,30 @@ const use = new Timeout(config.timeout_milliseconds);
 module.exports = class Listener {
   constructor() {}
 
-  receive(event, api) {
+  receive(event, send, error) {
+    var message = new Message(event);
+
     if (
-      event.threadID != undefined &&
-      config.allowed_threads.indexOf(event.threadID) > -1
+      message.threadID != undefined &&
+      config.allowed_threads.indexOf(message.threadID) > -1
     ) {
-      //get all listeners
-      for (let index in listenerList) {
-        listenerList[index].listen(event);
-      }
+      //get all listeners --[temp disabled]
+      // for (let index in listenerList) {
+      //   listenerList[index].listen(message);
+      // }
+      console.log(message.type.slice(0, 7) == `message`)
 
       //check if message and if commands are in timeout
-      if (
-        ["message", "message_reply"].indexOf(event.type) > -1 &&
-        !use.inTimeout(event.threadID)
-      ) {
-        let term = event.body.split(" ")[0].toLowerCase();
-
-        //get command from term
-        if (term.charAt(0) === config.prefix) {
+      if (message.type.slice(0, 7) == `message` && !use.inTimeout(message.threadID)) {
+        if (message.isCommand) {
           try {
-            commandList[term].listen(event, api, use);
+            commandList[message.term].listen(message, send, error, use);
           } catch (err) {
-            console.log(`invalid command: ${term}`);
+            error(
+              `invalid command: ${message.term}`,
+              message.threadID,
+              message.ID
+            );
           }
         }
       }
