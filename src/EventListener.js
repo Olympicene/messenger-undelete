@@ -58,18 +58,14 @@ module.exports = class Listener {
       message.threadID != undefined &&
       config.allowed_threads.indexOf(message.threadID) > -1
     ) {
-      console.log(message)
-
       //get all listeners --[temp disabled]
       // for (let index in listenerList) {
       //   listenerList[index].listen(message);
       // }
+      console.log(message.type.slice(0, 7) == `message`)
 
       //check if message and if commands are in timeout
-      if (
-        ["message", "message_reply"].indexOf(message.type) > -1 &&
-        !use.inTimeout(message.threadID)
-      ) {
+      if (message.type.slice(0, 7) == `message` && !use.inTimeout(message.threadID)) {
         if (message.isCommand) {
           try {
             commandList[message.term].listen(message, send, error, use);
