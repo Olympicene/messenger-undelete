@@ -8,7 +8,7 @@ var path = require("path");
 module.exports = class WhoSent extends Command {
   constructor() {
     super();
-    this.description = " ";
+    this.description = " : Game where you try to guess who sent the randomly selected comment";
     this.arguments = { _: 1 };
     this.type = ["message", "message_reply"];
     this.message = {};
