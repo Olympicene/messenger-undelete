@@ -35,11 +35,14 @@ exports.commandParse = (text) => {
 exports.isCommand = (text) => {
   var message = this.commandParse(text);
 
-  if (message._[0] == undefined) {
-    return false;
-  }
+  try { //just check if its a valid command or not
+
+    return message._[0].charAt(0) == settings.prefix
+
+  } catch (err) {
+  } 
   
-  return message._[0].charAt(0) == settings.prefix
+  return false;
 };
 
 exports.parseBody = (text) => {
