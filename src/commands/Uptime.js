@@ -5,7 +5,7 @@ const config = require(appRoot + "/database/config.js");
 module.exports = class Uptime extends Command {
   constructor() {
     super();
-    this.description = " ";
+    this.description = " : Sends the uptime of the program hours:minutes:seconds";
     this.arguments = { _: 1 };
     this.type = ["message", "message_reply"];
     this.message = {};

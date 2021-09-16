@@ -13,10 +13,7 @@ module.exports = class Commands {
       if (this.argumentIsCorrect(message)) {
         try {
 
-
           this.doAction(message, send, error, typingIndicator);
-
-
 
           use.threadTimeout(message.threadID);
         } catch (err) {
