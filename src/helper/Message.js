@@ -16,7 +16,6 @@ module.exports = class Message {
       body: bodyParse.parseBody(event.body),
       term: bodyParse.getTerm(event.body),
       messageReply: event.messageReply
-      
     };
   }
 };

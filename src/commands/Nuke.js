@@ -26,22 +26,15 @@ module.exports = class WhoSent extends Command {
     const databaseDir = path.resolve(appRoot + `/media/`);
     var messages = JSON.parse(fs.readFileSync(databaseDir + "/dislikes.json"));
 
+    var index = Math.floor(Math.random() * messages.length);
 
-    var randomProperty = function (obj) {
-      var keys = Object.keys(obj);
-      return keys[ keys.length * Math.random() << 0];
-    };
+    this.message = messages[index]
 
-    const name = randomProperty(messages);
-    const funny = messages[name][Math.floor(Math.random() * messages[name].length)];
+    messages.splice(index, 1)
 
-    this.message.body = funny;
+    send(this.message, message.threadID);
 
-    send(this.message, message.threadID)
-
-    this.message.body = `-${name}`;
-
-    timer(30000).then( _=>    send(this.message, message.threadID));
+    fs.writeFileSync(databaseDir + "/dislikes.json", JSON.stringify(messages, null, "\t"));
 
 
 
