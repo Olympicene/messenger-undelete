@@ -18,8 +18,9 @@ module.exports = class Rage extends Command {
     var stop = typingIndicator(message.threadID);
     var id = setInterval(() => {typingIndicator(message.threadID)}, 5000);
 
-    
-    this.message.attachment = fs.createReadStream(appRoot + `/media/rage.jpg`);
+    var files = fs.readdirSync(appRoot + `/media`)
+    let chosenFile = files[Math.floor(Math.random() * files.length)]
+    this.message.attachment = fs.createReadStream(chosenFile);
 
     send(this.message, message.threadID);
 
