@@ -20,8 +20,14 @@ module.exports = class Suggest extends Command {
     var stop = typingIndicator(message.threadID);
     var id = setInterval(() => {typingIndicator(message.threadID)}, 5000);
 
+    var imageLocation = '';
     var url = message.messageReply.attachments[0].url;
-    const imageLocation = appRoot + `/rage/${Date.now()}.png`;
+
+    if (message.messageReply.attachments[0].type == 'photo') {
+      imageLocation = appRoot + `/rage/${Date.now()}.png`;
+    } else {
+      imageLocation = appRoot + `/rage/${message.messageReply.attachments[0].filename}`;
+    }
 
     await super.downloadFile(url, imageLocation);
 
