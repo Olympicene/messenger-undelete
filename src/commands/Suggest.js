@@ -1,15 +1,17 @@
 const appRoot = require("app-root-path");
 const Command = require(appRoot + "/src/Command.js");
 const config = require(appRoot + "/database/config.js");
+var FormData = require("form-data");
 var fs = require("fs");
+const fetch = require("node-fetch");
 
 
-module.exports = class Rage extends Command {
+module.exports = class Suggest extends Command {
   constructor() {
     super();
-    this.description = " ";
+    this.description = " : reply to an screenshot to get source";
     this.arguments = { _: 1 };
-    this.type = ["message", "message_reply"];
+    this.type = ["message_reply_1_attachments"];
     this.message = {};
   }
 
@@ -18,18 +20,14 @@ module.exports = class Rage extends Command {
     var stop = typingIndicator(message.threadID);
     var id = setInterval(() => {typingIndicator(message.threadID)}, 5000);
 
-    var files = fs.readdirSync(appRoot + `/rage`)
-    let chosenFile = files[Math.floor(Math.random() * files.length)]
-    this.message.attachment = fs.createReadStream(appRoot + `/rage/` + chosenFile);
+    var url = message.messageReply.attachments[0].url;
+    const imageLocation = appRoot + `/rage/${Date.now()}.png`;
 
-    send(this.message, message.threadID);
+    await super.downloadFile(url, imageLocation);
 
-    
     //maybe temp but only way i can get the typing indicator
     stop();
     clearInterval(id);
     return;
   }
-
-  
 };
